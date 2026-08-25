@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { Login } from "../features/auth/pages/Login";
 import { Register } from "../features/auth/pages/Register";
 import { Game } from "../features/Game/Pages";
-import { Home } from "../features/Lobby/Pages/Home";
+import { Home } from "../features/Lobby/Pages/Home/Home";
 import { PublicRoute } from "./PublicRoute";
 import { ProtectedRoute } from "./ProtectedRoute";
 

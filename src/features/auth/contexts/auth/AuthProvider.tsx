@@ -6,6 +6,7 @@ import { useGetMe } from "../../../../packages/auth/hooks/auth/useGetMe"
 import { useRegister } from "../../../../packages/auth/hooks/auth/useRegister"
 import { useLogout } from "../../../../packages/auth/hooks/auth/useLogout"
 import { clearAuthToken } from "../../../../packages/auth/axios"
+import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter"
 
 const AUTH_USER_KEY = "chess-auth-user"
 
@@ -56,6 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await logoutMutation.mutateAsync()
         clearAuthToken()
         setUser(null)
+        mensagemAdapter.success("Voçê saiu!")
         navigate("/login")
     }
 
