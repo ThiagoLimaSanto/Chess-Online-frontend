@@ -1,11 +1,11 @@
 import { useEffect, useState, type ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
-import { clearAuthToken } from "../../packages/auth/axios"
-import { useGetMe } from "../../packages/auth/hooks/auth/useGetMe"
-import { useLogin } from "../../packages/auth/hooks/auth/useLogin"
-import { useLogout } from "../../packages/auth/hooks/auth/useLogout"
-import { useRegister } from "../../packages/auth/hooks/auth/useRegister"
 import { AuthContext, type AuthUser } from "./AuthContext"
+import { useLogin } from "../../../../packages/auth/hooks/auth/useLogin"
+import { useGetMe } from "../../../../packages/auth/hooks/auth/useGetMe"
+import { useRegister } from "../../../../packages/auth/hooks/auth/useRegister"
+import { useLogout } from "../../../../packages/auth/hooks/auth/useLogout"
+import { clearAuthToken } from "../../../../packages/auth/axios"
 
 const AUTH_USER_KEY = "chess-auth-user"
 

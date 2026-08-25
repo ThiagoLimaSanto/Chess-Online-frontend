@@ -1,0 +1,121 @@
+:global(*) {
+    box-sizing: border-box;
+}
+
+:global(body) {
+    margin: 0;
+    background: #080a0b;
+    color: #f5f7f4;
+    font-family: Arial, sans-serif;
+}
+
+.home {
+    min-height: 100vh;
+    position: relative;
+    isolation: isolate;
+    background: #080a0b;
+}
+
+.home::before {
+    content: "";
+    position: absolute;
+    inset: 58px 0 0;
+    z-index: -1;
+    background: linear-gradient(rgba(8, 10, 11, .72), rgba(8, 10, 11, .82)), url("/chess.webp") center / cover;
+}
+
+.content {
+    width: min(100%, 1170px);
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 0 18px 30px;
+    color: #fff;
+}
+
+.pageIntro {
+    padding: 16px 10px 18px;
+}
+
+.eyebrow {
+    margin: 0 0 8px;
+    color: #70c52e;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.7px;
+}
+
+.pageIntro h1 {
+    margin: 0 0 4px;
+    font-size: 24px;
+}
+
+.pageIntro h1 span {
+    font-size: 20px;
+}
+
+.pageIntro p:last-child {
+    margin: 0;
+    color: #969d9b;
+    font-size: 13px;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: 230px minmax(260px, 1fr) 258px;
+    gap: 14px;
+}
+
+.featureImage {
+    min-height: 282px;
+    border: 1px solid #252a2b;
+    border-radius: 9px;
+    background: linear-gradient(90deg, rgba(3, 7, 4, .05), rgba(3, 7, 4, .3)), url("/chess.webp") center / cover;
+}
+
+.rightRail {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    display: grid;
+    align-content: start;
+    gap: 13px;
+}
+
+@media (max-width: 900px) {
+    .dashboard {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .rightRail {
+        grid-column: 1 / 3;
+        grid-row: auto;
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 620px) {
+    .content {
+        padding: 0 12px 24px;
+    }
+
+    .pageIntro {
+        padding: 16px 2px 17px;
+    }
+
+    .pageIntro h1 {
+        font-size: 21px;
+    }
+
+    .dashboard,
+    .rightRail {
+        grid-template-columns: 1fr;
+    }
+
+    .featureImage {
+        order: -1;
+        min-height: 245px;
+    }
+
+    .rightRail {
+        grid-column: 1;
+    }
+}

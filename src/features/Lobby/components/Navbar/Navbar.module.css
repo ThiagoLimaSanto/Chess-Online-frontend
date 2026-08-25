@@ -1,0 +1,6 @@
+.topbar { width: calc(100vw - 36px); height: 58px; margin: 0 18px 18px calc(50% - 50vw + 18px); padding-right: 0; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #171b1c; }
+.logo { display: flex; align-items: center; gap: 9px; color: #fff; font-size: 16px; font-weight: 700; }.logo span { color: #70c52e; font-size: 27px; }
+.topActions { display: flex; align-items: center; gap: 19px; }.topActions button { border: 0; color: #fff; background: transparent; cursor: pointer; }
+.logoutButton { padding: 6px 10px; color: #fff; font-size: 13px; }.logoutButton:hover { color: #f35643; }
+.iconButton { position: relative; font-size: 19px; }.iconButton b { position: absolute; top: -8px; right: -8px; width: 15px; height: 15px; border-radius: 50%; color: #fff; background: #db4c46; font-size: 10px; line-height: 15px; }
+@media (max-width: 620px) { .topActions { gap: 13px; } }

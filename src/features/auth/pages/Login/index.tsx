@@ -1,7 +1,7 @@
-import { useAuth } from "../../../../contexts/auth/useAuth";
 import type { LoginPayload } from "../../../../packages/auth/hooks/auth/useLogin";
 import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter";
 import { AuthPage } from "../../../../packages/pages/auth/AuthPage";
+import { useAuth } from "../../contexts/auth/useAuth";
 
 export function Login() {
     const { login } = useAuth()

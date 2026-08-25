@@ -1,11 +1,11 @@
 import { useState, type FormEvent } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { useAuth } from "../../../contexts/auth/useAuth"
 import type { LoginPayload } from "../../auth/hooks/auth/useLogin"
 import { MainForm } from "../../form/MainForm"
 import formStyles from "../../form/MainForm.module.css"
 import { mensagemAdapter } from "../../mensagem/mensagemAdapter"
 import styles from "./AuthPage.module.css"
+import { useAuth } from "../../../features/auth/contexts/auth/useAuth"
 
 type AuthMode = 'login' | 'register'
 

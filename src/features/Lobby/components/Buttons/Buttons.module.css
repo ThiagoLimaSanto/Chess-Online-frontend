@@ -1,0 +1,35 @@
+.actions {
+    width: 100%;
+}
+
+.primary,
+.secondary {
+    width: 100%;
+    min-height: 40px;
+    border: 1px solid #2a3030;
+    border-radius: 6px;
+    color: #e8ece8;
+    background: transparent;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.primary {
+    color: #102006;
+    border-color: #69b72e;
+    background: #63b72a;
+}
+
+.primary:hover {
+    background: #75cf35;
+}
+
+.secondary {
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.secondary:hover {
+    border-color: #5c9e32;
+    background: #18201a;
+}

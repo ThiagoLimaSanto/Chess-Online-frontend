@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query"
 import { api } from "../../axios"
-import type { AuthUser } from "../../../../contexts/auth/AuthContext"
+import type { AuthUser } from "../../../../features/auth/contexts/auth/AuthContext"
 
 async function getMeRequest() {
     const response = await api.get<AuthUser>("/auth/me")
