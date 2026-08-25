@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useAuth } from "../../../contexts/auth/useAuth"
+import type { LoginPayload } from "../../auth/hooks/auth/useLogin"
 import { MainForm } from "../../form/MainForm"
 import formStyles from "../../form/MainForm.module.css"
 import { mensagemAdapter } from "../../mensagem/mensagemAdapter"
@@ -8,10 +9,10 @@ import styles from "./AuthPage.module.css"
 
 type AuthMode = 'login' | 'register'
 
-export function AuthPage({ mode: initialMode = 'login' }: { mode?: AuthMode }) {
+export function AuthPage({ mode: initialMode = 'login', handle }: { mode?: AuthMode, handle: ({ username, password }: LoginPayload) => Promise<unknown> }) {
     const [mode, setMode] = useState<AuthMode>(initialMode)
     const navigate = useNavigate()
-    const { register, login, isLoading } = useAuth()
+    const { isLoading } = useAuth()
 
     async function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
@@ -19,22 +20,17 @@ export function AuthPage({ mode: initialMode = 'login' }: { mode?: AuthMode }) {
         const formData = new FormData(event.currentTarget)
         const username = String(formData.get("username") ?? "").trim()
         const password = String(formData.get("password") ?? "")
-        if (!isRegister) {
-            try {
-                const authenticatedUser = await login(username, password)
-                mensagemAdapter.success(`Bem-vindo, ${authenticatedUser.username}!`)
-                navigate("/game")
-            } catch (error: unknown) {
-                mensagemAdapter.error(error, "Não foi possível realizar o login.")
-            }
-            return
-        }
-
+        const payload = { username, password }
         try {
-            await register(username, password)
-        } catch (error: unknown) {
-            mensagemAdapter.error(error, "Não foi possível criar a conta.")
+            if (!isRegister) {
+                await handle(payload)
+                navigate("/game")
+                return
+            }
+            await handle(payload)
             return
+        } catch (error) {
+            mensagemAdapter.error(error)
         }
 
         mensagemAdapter.success("Conta criada com sucesso!")
