@@ -1,17 +1,28 @@
 import { Route, Routes } from "react-router-dom";
 
-import { Game } from "../pages/Game";
-import { Home } from "../pages/Home";
 import { Login } from "../features/auth/pages/Login";
 import { Register } from "../features/auth/pages/Register";
+import { Game } from "../pages/Game";
+import { Home } from "../pages/Home";
+import { PublicRoute } from "./PublicRoute";
+import { ProtectedRoute } from "./ProtectedRoute";
 
 export function AppRoutes() {
     return (
         <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/game" element={<Game />} />
+            <Route element={<PublicRoute />}>
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+            </Route>
+
+            <Route element={<ProtectedRoute />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/game" element={<Game />} />
+            </Route>
+
+            <Route element={<ProtectedRoute role="ADMIN" />}>
+                <Route path="/admin" element={<h2>Admin</h2>} />
+            </Route>
         </Routes>
     )
 }

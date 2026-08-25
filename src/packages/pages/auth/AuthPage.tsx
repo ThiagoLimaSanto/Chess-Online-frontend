@@ -24,7 +24,7 @@ export function AuthPage({ mode: initialMode = 'login', handle }: { mode?: AuthM
         try {
             if (!isRegister) {
                 await handle(payload)
-                navigate("/game")
+                navigate("/")
                 return
             }
             await handle(payload)
