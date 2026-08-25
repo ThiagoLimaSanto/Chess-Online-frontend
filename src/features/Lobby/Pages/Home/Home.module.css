@@ -19,7 +19,7 @@
 .home::before {
     content: "";
     position: absolute;
-    inset: 58px 0 0;
+    inset: 68px 0 0;
     z-index: -1;
     background: linear-gradient(rgba(8, 10, 11, .72), rgba(8, 10, 11, .82)), url("/chess.webp") center / cover;
 }
@@ -39,24 +39,24 @@
 .eyebrow {
     margin: 0 0 8px;
     color: #70c52e;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 1.7px;
 }
 
 .pageIntro h1 {
     margin: 0 0 4px;
-    font-size: 24px;
+    font-size: 29px;
 }
 
 .pageIntro h1 span {
-    font-size: 20px;
+    font-size: 24px;
 }
 
 .pageIntro p:last-child {
     margin: 0;
     color: #969d9b;
-    font-size: 13px;
+    font-size: 16px;
 }
 
 .dashboard {
@@ -102,7 +102,7 @@
     }
 
     .pageIntro h1 {
-        font-size: 21px;
+        font-size: 25px;
     }
 
     .dashboard,

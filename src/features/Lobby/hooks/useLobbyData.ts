@@ -29,7 +29,8 @@ export function useLobbyData() {
         friends: [
             { name: "Carlos", status: "Jogando uma partida", avatar: "C", active: true },
             { name: "Ana", status: "Online", avatar: "A", active: true },
-            { name: "Pedro", status: "Online", avatar: "P", active: false },
+            { name: "Pedro", status: "Offline", avatar: "P", active: false },
+            { name: "Mariana", status: "Online", avatar: "M", active: true },
         ] satisfies Friend[],
         activities: [
             { label: "Carlos iniciou uma partida", icon: "⚔", time: "5 minutos" },

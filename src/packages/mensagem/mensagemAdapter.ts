@@ -2,8 +2,8 @@ import axios from "axios"
 import toast from "react-hot-toast"
 
 export const mensagemAdapter = {
-    success(message: string) {
-        return toast.success(message)
+    success(message: string, fallback = "Sucesso!") {
+        return toast.success(message || fallback)
     },
 
     error(error: unknown, fallback = "Ocorreu um erro inesperado.") {
@@ -14,8 +14,8 @@ export const mensagemAdapter = {
         return toast.error(message ?? fallback)
     },
 
-    loading(message: string) {
-        return toast.loading(message)
+    loading(message: string, fallback = "Carregando...") {
+        return toast.loading(message || fallback)
     },
 
     dismiss(toastId?: string) {

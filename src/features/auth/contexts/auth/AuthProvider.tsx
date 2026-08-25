@@ -42,6 +42,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }, [user])
 
     async function login(username: string, password: string) {
+        mensagemAdapter.dismiss()
         await loginMutation.mutateAsync({ username, password })
         const authenticatedUser = await getMe()
         setUser(authenticatedUser)
@@ -57,7 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await logoutMutation.mutateAsync()
         clearAuthToken()
         setUser(null)
-        mensagemAdapter.success("Voçê saiu!")
+        mensagemAdapter.success("Você saiu!")
         navigate("/login")
     }
 
