@@ -5,14 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "npm run validate && vite",
+    "validate": "npm run lint && npm run type-check",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.102.3",
+    "axios": "^1.19.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "react-hot-toast": "^2.6.0",
     "react-router-dom": "^7.18.2"
   },
   "devDependencies": {

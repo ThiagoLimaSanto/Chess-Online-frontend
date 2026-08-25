@@ -1,0 +1,31 @@
+.form {
+    display: grid;
+    gap: 18px;
+    width: 100%;
+}
+
+.label {
+    display: grid;
+    gap: 8px;
+    color: #ccc;
+    font-size: 14px;
+}
+
+.input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #555;
+    border-radius: 8px;
+    outline: none;
+    color: #fff;
+    background: #151515;
+    font: inherit;
+}
+
+.input::placeholder {
+    color: #777;
+}
+
+.input:focus {
+    border-color: #fff;
+}
