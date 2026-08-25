@@ -1,10 +1,10 @@
 import { useEffect, useState, type ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
-import { useLogin } from "../../packages/auth/hooks/auth/useLogin"
+import { clearAuthToken } from "../../packages/auth/axios"
 import { useGetMe } from "../../packages/auth/hooks/auth/useGetMe"
+import { useLogin } from "../../packages/auth/hooks/auth/useLogin"
 import { useLogout } from "../../packages/auth/hooks/auth/useLogout"
 import { useRegister } from "../../packages/auth/hooks/auth/useRegister"
-import { clearAuthToken } from "../../packages/auth/axios"
 import { AuthContext, type AuthUser } from "./AuthContext"
 
 const AUTH_USER_KEY = "chess-auth-user"
@@ -56,6 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await logoutMutation.mutateAsync()
         clearAuthToken()
         setUser(null)
+        navigate("/login")
     }
 
     return (

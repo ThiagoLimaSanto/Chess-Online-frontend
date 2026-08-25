@@ -24,16 +24,16 @@ export function AuthPage({ mode: initialMode = 'login' }: { mode?: AuthMode }) {
                 const authenticatedUser = await login(username, password)
                 mensagemAdapter.success(`Bem-vindo, ${authenticatedUser.username}!`)
                 navigate("/game")
-            } catch {
-                mensagemAdapter.error("Usuário ou senha inválidos.")
+            } catch (error: unknown) {
+                mensagemAdapter.error(error, "Não foi possível realizar o login.")
             }
             return
         }
 
         try {
             await register(username, password)
-        } catch {
-            mensagemAdapter.error("Este usuário já está cadastrado.")
+        } catch (error: unknown) {
+            mensagemAdapter.error(error, "Não foi possível criar a conta.")
             return
         }
 
