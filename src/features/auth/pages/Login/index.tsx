@@ -1,4 +1,4 @@
-import type { LoginPayload } from "../../../../packages/auth/hooks/auth/useLogin";
+import type { LoginPayload } from "../../../../packages/hooks/auth/useLogin";
 import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter";
 import { AuthPage } from "../../../../packages/pages/auth/AuthPage";
 import { useAuth } from "../../contexts/auth/useAuth";

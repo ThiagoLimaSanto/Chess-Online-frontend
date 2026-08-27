@@ -1,20 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
-import { api } from "../../axios"
-import type { UserResponse } from "../auth/useGetMe"
-
-interface PageResponse<T> {
-    content: T[]
-    totalElements: number
-    totalPages: number
-    size: number
-    number: number
-}
-
-interface SearchPlayersRequest {
-    username?: string
-    page: number
-    size: number
-}
+import { api } from "../../auth/axios"
+import type { SearchPlayersRequest } from "../types/params/Params"
+import type { PageResponse, UserResponse } from "../types/response/PageResponse"
 
 async function getPlayersRequest({ username, page = 0, size = 5 }: SearchPlayersRequest) {
     const response = await api.get<PageResponse<UserResponse>>("/users/players",

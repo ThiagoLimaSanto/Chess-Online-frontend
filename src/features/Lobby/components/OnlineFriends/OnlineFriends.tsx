@@ -1,23 +1,74 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+
 import SimpleBar from "simplebar-react"
 import "simplebar-react/dist/simplebar.min.css"
-import type { Friend } from "../../hooks/useLobbyData"
+
+import { useGetFriendship } from "../../../../packages/hooks/players/useGetFriendship"
 import { SearchFriend } from "../SearchPlayers/SearchPlayers"
+
+import { Profile } from "../Profile/Profile"
 import styles from "./OnlineFriends.module.css"
 
-type OnlineFriendsProps = { friends: Friend[] }
-export function OnlineFriends({ friends }: OnlineFriendsProps) {
+export function OnlineFriends() {
     const [isAddFriendOpen, setIsAddFriendOpen] = useState(false)
+    const [username, setUsername] = useState("")
+    const [search, setSearch] = useState("")
+
+    const {
+        data: friends,
+        isLoading,
+        isFetching
+    } = useGetFriendship({
+        username,
+        page: 0,
+        size: 5
+    })
+
+    useEffect(() => {
+        const time = setTimeout(() => {
+            setUsername(search)
+        }, 500)
+
+        return () => clearTimeout(time)
+    }, [search])
+
+    if (isLoading) {
+        return <p>Carregando...</p>
+    }
 
     return (
         <div className={styles.friendArea}>
             <section className={styles.card}>
-                <div className={styles.heading}><h2>♟ &nbsp;Amigos</h2></div>
-                <SimpleBar className={styles.friendList} autoHide={false}>
-                    {friends.map((friend) => <div className={styles.friend} key={friend.name}><span className={styles.avatar}>{friend.avatar}</span><span><b>{friend.name} {friend.active && <i className={styles.online} />}</b><small>{friend.status}</small></span>{friend.name === "Carlos" && <span>▦</span>}</div>)}
+
+                <div className={styles.heading}>
+                    <h2>♟ &nbsp;Amigos</h2>
+                </div>
+
+                <SimpleBar
+                    className={styles.friendList}
+                    autoHide={false}
+                >
+                    {friends?.content.map((friend) => (
+                        <div
+                            className={styles.friend}
+                            key={friend.id}
+                        >
+                            <Profile username={friend.username} />
+                        </div>
+                    ))}
                 </SimpleBar>
-                <button className={styles.add} onClick={() => setIsAddFriendOpen((isOpen) => !isOpen)}>＋ Adicionar amigo</button>
+
+                <button
+                    className={styles.add}
+                    onClick={() =>
+                        setIsAddFriendOpen((isOpen) => !isOpen)
+                    }
+                >
+                    ＋ Adicionar amigo
+                </button>
+
             </section>
+
             {isAddFriendOpen && <SearchFriend />}
         </div>
     )

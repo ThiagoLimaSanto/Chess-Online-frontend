@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import type { LoginPayload } from "../../auth/hooks/auth/useLogin"
+import type { LoginPayload } from "../../hooks/auth/useLogin"
 import { MainForm } from "../../form/MainForm"
 import formStyles from "../../form/MainForm.module.css"
 import { mensagemAdapter } from "../../mensagem/mensagemAdapter"

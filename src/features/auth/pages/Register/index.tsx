@@ -1,4 +1,4 @@
-import type { RegisterPayload } from "../../../../packages/auth/hooks/auth/useRegister";
+import type { RegisterPayload } from "../../../../packages/hooks/auth/useRegister";
 import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter";
 import { AuthPage } from "../../../../packages/pages/auth/AuthPage";
 import { useAuth } from "../../contexts/auth/useAuth";

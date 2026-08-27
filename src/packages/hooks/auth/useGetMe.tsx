@@ -1,11 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { api } from "../../axios"
-
-export interface UserResponse {
-    username: string,
-    id: string,
-    createdAt: string,
-}
+import { api } from "../../auth/axios"
+import type { UserResponse } from "../types/response/PageResponse"
 
 async function getMeRequest() {
     const response = await api.get<UserResponse>("/auth/me")

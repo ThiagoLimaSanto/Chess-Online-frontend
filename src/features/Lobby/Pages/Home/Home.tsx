@@ -1,17 +1,17 @@
-import { useAuth } from "../../../auth/contexts/auth/useAuth"
 import { useNavigate } from "react-router-dom"
-import { useLobbyData } from "../../hooks/useLobbyData"
+import { useAuth } from "../../../auth/contexts/auth/useAuth"
+import { Navbar } from "../../components/Navbar/Navbar"
 import { OnlineFriends } from "../../components/OnlineFriends/OnlineFriends"
 import { Performance } from "../../components/Performance/Performance"
 import { PlayActions } from "../../components/PlayActions/PlayActions"
-import { Navbar } from "../../components/Navbar/Navbar"
 import { QuickGames } from "../../components/QuickGames/QuickGames"
+import { useLobbyData } from "../../hooks/useLobbyData"
 import styles from "./Home.module.css"
 
 export function Home() {
     const navigate = useNavigate()
     const { user, logout } = useAuth()
-    const { games, friends } = useLobbyData()
+    const { games } = useLobbyData()
     const username = user?.username || "João"
 
     return (
@@ -33,7 +33,7 @@ export function Home() {
                     <QuickGames username={username} games={games} onOpenGame={() => navigate("/game")} />
 
                     <aside className={styles.rightRail}>
-                        <OnlineFriends friends={friends} />
+                        <OnlineFriends />
                         <Performance />
                     </aside>
                 </div>

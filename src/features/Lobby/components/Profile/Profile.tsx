@@ -9,7 +9,6 @@ export function Profile({ username }: ProfileProps) {
         <div className={styles.profile}>
             <span className={styles.avatar}>{username[0].toUpperCase()}</span>
             {username}
-            <span>⌄</span>
         </div>
     )
 }
