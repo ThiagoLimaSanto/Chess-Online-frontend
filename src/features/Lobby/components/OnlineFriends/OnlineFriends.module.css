@@ -3,54 +3,123 @@
     min-width: 0;
 }
 
+/* Card principal */
 .card {
     width: 100%;
     min-width: 0;
-    padding: 16px 14px 13px;
-    border: 1px solid #252a2b;
-    border-radius: 9px;
-    background: #111516;
+    padding: 18px 16px 14px;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(27, 32, 33, 0.98),
+            rgba(14, 18, 19, 0.98)
+        );
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.025);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
+.card:hover {
+    border-color: rgba(112, 197, 46, 0.18);
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(112, 197, 46, 0.03);
+}
+
+/* Cabeçalho */
 .heading {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 15px;
+    gap: 9px;
+
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .heading h2 {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
     margin: 0;
+
+    color: #f0f3f1;
+
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0.2px;
 }
 
+.heading h2::first-letter {
+    color: #70c52e;
+}
+
+/* Lista */
 .friendList {
     max-height: 168px;
-    padding-right: 8px;
+    padding-right: 7px;
 }
 
+/* Scrollbar */
 .friendList :global(.simplebar-scrollbar::before) {
     top: 2px;
     bottom: 2px;
+
     opacity: 1;
-    border-radius: 4px;
-    background: #58605d;
+
+    border-radius: 10px;
+
+    background: #4d5652;
+}
+
+.friendList :global(.simplebar-scrollbar:hover::before) {
+    background: #70c52e;
 }
 
 .friendList :global(.simplebar-track.simplebar-vertical) {
     width: 4px;
 }
 
+/* Amigo */
 .friend {
-    min-height: 42px;
+    min-height: 46px;
+
     display: flex;
     align-items: center;
     gap: 10px;
+
+    margin-bottom: 2px;
+    padding: 6px 8px;
+
+    border-radius: 8px;
+
+    color: #e4e8e6;
+
     font-size: 12px;
+
+    transition:
+        background 0.18s ease,
+        transform 0.18s ease;
 }
 
-.friend>span:nth-child(2) {
+.friend:hover {
+    background: rgba(255, 255, 255, 0.045);
+    transform: translateX(2px);
+}
+
+.friend > span:nth-child(2) {
     flex: 1;
 }
 
@@ -59,46 +128,114 @@
     display: block;
 }
 
-.friend small {
-    margin-top: 3px;
-    color: #9ca4a1;
-    font-size: 11px;
+.friend b {
+    color: #e7ebe9;
+    font-weight: 600;
 }
 
+.friend small {
+    margin-top: 3px;
+
+    color: #8f9995;
+
+    font-size: 10px;
+}
+
+/* Avatar */
 .avatar {
-    width: 27px;
-    height: 27px;
+    width: 30px;
+    height: 30px;
+
     display: inline-grid;
     place-items: center;
+
+    flex-shrink: 0;
+
+    border: 2px solid rgba(112, 197, 46, 0.2);
     border-radius: 50%;
+
     color: #fff;
-    background: linear-gradient(145deg, #b58359, #34393b);
+
+    background:
+        linear-gradient(
+            145deg,
+            #b58359,
+            #34393b
+        );
+
+    box-shadow:
+        0 3px 8px rgba(0, 0, 0, 0.25);
+
     font-size: 11px;
     font-weight: 700;
 }
 
+/* Online */
 .online {
     display: inline-block;
+
     width: 7px;
     height: 7px;
-    margin-left: 3px;
+
+    margin-left: 5px;
+
+    border: 2px solid #111516;
     border-radius: 50%;
+
     background: #6ac22d;
+
+    box-shadow: 0 0 6px rgba(106, 194, 45, 0.7);
 }
 
+/* Botão */
 .add {
     width: 100%;
-    min-height: 30px;
+    min-height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
     margin-top: 10px;
-    border: 1px solid #2a3030;
-    border-radius: 6px;
+
+    border: 1px solid rgba(112, 197, 46, 0.28);
+    border-radius: 8px;
+
     color: #70c52e;
-    background: transparent;
+
+    background: rgba(112, 197, 46, 0.04);
+
     font-size: 11px;
+    font-weight: 600;
+
     cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .add:hover {
-    border-color: #5c9e32;
-    background: #18201a;
+    border-color: rgba(112, 197, 46, 0.55);
+
+    color: #83dc3d;
+
+    background: rgba(112, 197, 46, 0.1);
+
+    box-shadow: 0 4px 15px rgba(112, 197, 46, 0.08);
+
+    transform: translateY(-1px);
+}
+
+.add:active {
+    transform: translateY(0);
+}
+
+.add:focus-visible {
+    outline: 2px solid rgba(112, 197, 46, 0.5);
+    outline-offset: 2px;
 }

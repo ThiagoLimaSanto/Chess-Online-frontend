@@ -64,6 +64,10 @@
     line-height: 17px;
 }
 
+.messageContainer {
+    position: relative;
+}
+
 @media (max-width: 620px) {
     .topActions {
         gap: 13px;

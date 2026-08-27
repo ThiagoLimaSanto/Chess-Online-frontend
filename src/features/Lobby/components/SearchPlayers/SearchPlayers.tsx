@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { FaUserPlus } from "react-icons/fa"
 import { useGetPlayers } from "../../../../packages/hooks/players/useGetPlayers"
 
-import { useSendFriendship } from "../../../../packages/hooks/players/useSendoFriendship"
+import { useSendFriendship } from "../../../../packages/hooks/players/useSendFriendship"
 import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter"
 import styles from "./SearchPlayers.module.css"
 

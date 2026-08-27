@@ -1,6 +1,7 @@
 import { createContext } from "react"
 
 export type AuthUser = {
+    id: string
     username: string
 }
 
