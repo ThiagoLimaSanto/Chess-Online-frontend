@@ -4,9 +4,9 @@ import SimpleBar from "simplebar-react"
 import "simplebar-react/dist/simplebar.min.css"
 
 import { useGetFriendship } from "../../../../packages/hooks/players/useGetFriendship"
-import { SearchFriend } from "../SearchPlayers/SearchPlayers"
 
 import { Profile } from "../Profile/Profile"
+import { SearchPlayers } from "../SearchPlayers/SearchPlayers"
 import styles from "./OnlineFriends.module.css"
 
 export function OnlineFriends() {
@@ -27,10 +27,14 @@ export function OnlineFriends() {
     useEffect(() => {
         const time = setTimeout(() => {
             setUsername(search)
+            setSearch(search)
         }, 500)
 
         return () => clearTimeout(time)
     }, [search])
+
+
+    if (isFetching) return <p>Buscando amigos...</p>
 
     if (isLoading) {
         return <p>Carregando...</p>
@@ -69,7 +73,7 @@ export function OnlineFriends() {
 
             </section>
 
-            {isAddFriendOpen && <SearchFriend />}
+            {isAddFriendOpen && <SearchPlayers />}
         </div>
     )
 }

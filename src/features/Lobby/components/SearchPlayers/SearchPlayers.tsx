@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react"
 
+import { FaUserPlus } from "react-icons/fa"
 import { useGetPlayers } from "../../../../packages/hooks/players/useGetPlayers"
 
+import { useSendFriendship } from "../../../../packages/hooks/players/useSendoFriendship"
+import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter"
 import styles from "./SearchPlayers.module.css"
 
-export function SearchFriend() {
+export function SearchPlayers() {
 
     const [search, setSearch] = useState("")
     const [username, setUsername] = useState("")
@@ -29,6 +32,20 @@ export function SearchFriend() {
         size: 6
     })
 
+    const { mutateAsync: sendRequest } = useSendFriendship();
+
+    const handleSendRequest = async (receiverId: string) => {
+        try {
+            await sendRequest(receiverId)
+            mensagemAdapter.success("Pedido enviado!")
+            console.log("Pedido enviado!")
+        } catch (error) {
+            mensagemAdapter.error(error)
+        }
+    }
+
+    if (isFetching) return <p>Buscando jogadores...</p>
+
     if (isLoading) {
         return <p>Carregando...</p>
     }
@@ -52,12 +69,6 @@ export function SearchFriend() {
 
             </div>
 
-            {isFetching && (
-                <p className={styles.loading}>
-                    Buscando jogadores...
-                </p>
-            )}
-
             <div className={styles.results}>
 
                 {(data && !isFetching && data?.content?.length > 0) && (
@@ -67,13 +78,23 @@ export function SearchFriend() {
                 )}
 
                 {data?.content?.map((player) => (
-                    <button
+                    <div
                         key={player.id}
-                        className={styles.player}
-                        type="button"
+                        className={styles.playerContainer}
                     >
-                        {player.username}
-                    </button>
+                        <span className={styles.playerUsername}>
+                            {player.username}
+                        </span>
+
+                        <button
+                            className={styles.messageButton}
+                            type="button"
+                            onClick={() => handleSendRequest(player.id)}
+                            aria-label={`Enviar mensagem para ${player.username}`}
+                        >
+                            <FaUserPlus />
+                        </button>
+                    </div>
                 ))}
 
             </div>
