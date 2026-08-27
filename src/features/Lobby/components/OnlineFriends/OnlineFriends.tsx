@@ -2,8 +2,8 @@ import { useState } from "react"
 import SimpleBar from "simplebar-react"
 import "simplebar-react/dist/simplebar.min.css"
 import type { Friend } from "../../hooks/useLobbyData"
+import { SearchFriend } from "../SearchPlayers/SearchPlayers"
 import styles from "./OnlineFriends.module.css"
-import { SearchFriend } from "./SearchFriend"
 
 type OnlineFriendsProps = { friends: Friend[] }
 export function OnlineFriends({ friends }: OnlineFriendsProps) {

@@ -1,0 +1,179 @@
+.searchPanel {
+    position: absolute;
+    top: 0;
+    left: calc(100% + 14px);
+
+    width: 260px;
+    padding: 12px;
+
+    border: 1px solid #252a2b;
+    border-radius: 10px;
+
+    background: #111516;
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.35),
+        0 2px 8px rgba(0, 0, 0, 0.2);
+
+    z-index: 10;
+}
+
+.searchField {
+    position: relative;
+    width: 100%;
+}
+
+.searchField>span {
+    position: absolute;
+
+    top: 50%;
+    left: 10px;
+
+    color: #8f9996;
+    font-size: 18px;
+    line-height: 1;
+
+    transform: translateY(-50%);
+
+    pointer-events: none;
+}
+
+.searchPanel input {
+    box-sizing: border-box;
+
+    width: 100%;
+    height: 38px;
+
+    padding: 8px 10px 8px 32px;
+
+    border: 1px solid #2a3030;
+    border-radius: 7px;
+
+    outline: none;
+
+    color: #e8eceb;
+    background: #0b0e0f;
+
+    font-size: 13px;
+
+    transition:
+        border-color 0.15s ease,
+        background 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.searchPanel input::placeholder {
+    color: #737d7a;
+}
+
+.searchPanel input:focus {
+    border-color: #4c7771;
+    background: #0d1112;
+
+    box-shadow: 0 0 0 2px rgba(76, 119, 113, 0.12);
+}
+
+/* Área dos resultados */
+.results {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+
+    margin-top: 10px;
+}
+
+/* Cada jogador */
+.player {
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    min-height: 42px;
+
+    box-sizing: border-box;
+
+    padding: 8px 10px;
+
+    border: 1px solid transparent;
+    border-radius: 7px;
+
+    color: #d7dcda;
+
+    background: transparent;
+
+    font-size: 13px;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.player:hover {
+    border-color: #252f2e;
+
+    background: #191e1f;
+
+    color: #ffffff;
+}
+
+.player:active {
+    background: #202727;
+}
+
+/* Mensagens */
+.status {
+    margin: 12px 4px 4px;
+
+    color: #7f8986;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+
+    text-align: center;
+}
+
+.loading {
+    margin: 10px 4px;
+
+    color: #8fa7a3;
+
+    font-size: 12px;
+
+    text-align: center;
+}
+
+.sugestionTitle {
+    margin: 12px 0;
+    color: #737d7a;
+    font-size: 12px;
+    text-align: center;
+
+}
+
+.empty {
+    margin: 14px 4px 6px;
+
+    color: #737d7a;
+
+    font-size: 12px;
+
+    text-align: center;
+}
+
+@media (max-width: 620px) {
+    .searchPanel {
+        position: static;
+
+        width: 100%;
+        margin-top: 14px;
+
+        box-sizing: border-box;
+    }
+}

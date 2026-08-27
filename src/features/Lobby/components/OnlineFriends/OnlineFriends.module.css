@@ -1,2 +1,104 @@
-.friendArea { position: relative; min-width: 0; }.card { width: 100%; min-width: 0; padding: 16px 14px 13px; border: 1px solid #252a2b; border-radius: 9px; background: #111516; }.heading { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }.heading h2 { margin: 0; font-size: 14px; font-weight: 500; }.friendList { max-height: 168px; padding-right: 8px; }.friendList :global(.simplebar-scrollbar::before) { top: 2px; bottom: 2px; opacity: 1; border-radius: 4px; background: #58605d; }.friendList :global(.simplebar-track.simplebar-vertical) { width: 4px; }.friend { min-height: 42px; display: flex; align-items: center; gap: 10px; font-size: 12px; }.friend > span:nth-child(2) { flex: 1; }.friend b, .friend small { display: block; }.friend small { margin-top: 3px; color: #9ca4a1; font-size: 11px; }.avatar { width: 27px; height: 27px; display: inline-grid; place-items: center; border-radius: 50%; color: #fff; background: linear-gradient(145deg, #b58359, #34393b); font-size: 11px; font-weight: 700; }.online { display: inline-block; width: 7px; height: 7px; margin-left: 3px; border-radius: 50%; background: #6ac22d; }.add { width: 100%; min-height: 30px; margin-top: 10px; border: 1px solid #2a3030; border-radius: 6px; color: #70c52e; background: transparent; font-size: 11px; cursor: pointer; }.add:hover { border-color: #5c9e32; background: #18201a; }.searchPanel { position: absolute; top: 0; left: calc(100% + 14px); width: 220px; padding: 16px 14px; border: 1px solid #252a2b; border-radius: 9px; background: #111516; }.searchField { position: relative; }.searchField > span { position: absolute; top: 50%; left: 10px; color: #9ca4a1; font-size: 20px; line-height: 1; transform: translateY(-50%); }.searchPanel input { width: 100%; padding: 9px 10px 9px 32px; border: 1px solid #2a3030; border-radius: 6px; outline: none; color: #fff; background: #0b0e0f; }.searchPanel input::placeholder { color: #9ca4a1; }.searchPanel p { margin: 52px 0 0; color: #d7dcda; font-size: 12px; line-height: 1.4; text-align: center; }
-@media (max-width: 620px) { .searchPanel { position: static; width: 100%; margin-top: 14px; } }
+.friendArea {
+    position: relative;
+    min-width: 0;
+}
+
+.card {
+    width: 100%;
+    min-width: 0;
+    padding: 16px 14px 13px;
+    border: 1px solid #252a2b;
+    border-radius: 9px;
+    background: #111516;
+}
+
+.heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.heading h2 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.friendList {
+    max-height: 168px;
+    padding-right: 8px;
+}
+
+.friendList :global(.simplebar-scrollbar::before) {
+    top: 2px;
+    bottom: 2px;
+    opacity: 1;
+    border-radius: 4px;
+    background: #58605d;
+}
+
+.friendList :global(.simplebar-track.simplebar-vertical) {
+    width: 4px;
+}
+
+.friend {
+    min-height: 42px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+}
+
+.friend>span:nth-child(2) {
+    flex: 1;
+}
+
+.friend b,
+.friend small {
+    display: block;
+}
+
+.friend small {
+    margin-top: 3px;
+    color: #9ca4a1;
+    font-size: 11px;
+}
+
+.avatar {
+    width: 27px;
+    height: 27px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 50%;
+    color: #fff;
+    background: linear-gradient(145deg, #b58359, #34393b);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.online {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-left: 3px;
+    border-radius: 50%;
+    background: #6ac22d;
+}
+
+.add {
+    width: 100%;
+    min-height: 30px;
+    margin-top: 10px;
+    border: 1px solid #2a3030;
+    border-radius: 6px;
+    color: #70c52e;
+    background: transparent;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.add:hover {
+    border-color: #5c9e32;
+    background: #18201a;
+}

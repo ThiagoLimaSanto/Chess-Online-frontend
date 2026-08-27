@@ -1,12 +1,12 @@
 import { useEffect, useState, type ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
-import { AuthContext, type AuthUser } from "./AuthContext"
-import { useLogin } from "../../../../packages/auth/hooks/auth/useLogin"
+import { clearAuthToken, setAuthToken } from "../../../../packages/auth/axios"
 import { useGetMe } from "../../../../packages/auth/hooks/auth/useGetMe"
-import { useRegister } from "../../../../packages/auth/hooks/auth/useRegister"
+import { useLogin } from "../../../../packages/auth/hooks/auth/useLogin"
 import { useLogout } from "../../../../packages/auth/hooks/auth/useLogout"
-import { clearAuthToken } from "../../../../packages/auth/axios"
+import { useRegister } from "../../../../packages/auth/hooks/auth/useRegister"
 import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter"
+import { AuthContext, type AuthUser } from "./AuthContext"
 
 const AUTH_USER_KEY = "chess-auth-user"
 
@@ -43,7 +43,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     async function login(username: string, password: string) {
         mensagemAdapter.dismiss()
-        await loginMutation.mutateAsync({ username, password })
+        const response = await loginMutation.mutateAsync({ username, password })
+        setAuthToken(response.token)
         const authenticatedUser = await getMe()
         setUser(authenticatedUser)
         return authenticatedUser

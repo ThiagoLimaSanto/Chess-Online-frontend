@@ -1,5 +1,9 @@
-import { useMutation } from "@tanstack/react-query"
-import { api, setAuthToken } from "../../axios"
+import {
+    useMutation,
+    useQueryClient,
+} from "@tanstack/react-query"
+
+import { api } from "../../axios"
 
 export type LoginPayload = {
     username: string
@@ -11,13 +15,23 @@ export type LoginResponse = {
 }
 
 async function loginRequest(payload: LoginPayload) {
-    const response = await api.post<LoginResponse>("/auth/login", payload)
-    setAuthToken(response.data.token)
+    const response = await api.post<LoginResponse>(
+        "/auth/login",
+        payload
+    )
     return response.data
 }
 
 export function useLogin() {
+    const queryClient = useQueryClient()
+
     return useMutation({
         mutationFn: loginRequest,
+
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: ["player"],
+            })
+        },
     })
 }
