@@ -64,7 +64,11 @@
     font-size: 17px;
     transition: border-color .18s ease, background .18s ease;
 }
-.iconButton:hover { border-color: rgba(112, 197, 46, .45) !important; background: rgba(112, 197, 46, .1) !important; }
+
+.iconButton:hover {
+    border-color: rgba(112, 197, 46, .45) !important;
+    background: rgba(112, 197, 46, .1) !important;
+}
 
 .iconButton b {
     position: absolute;
@@ -81,6 +85,92 @@
 
 .messageContainer {
     position: relative;
+}
+
+.challengeContainer {
+    position: relative;
+}
+
+.challengeButton {
+    height: 36px;
+    padding: 0 13px !important;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    border: 1px solid rgba(112, 197, 46, .22) !important;
+    border-radius: 9px !important;
+
+    color: #dce6df !important;
+    background: rgba(112, 197, 46, .06) !important;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        color .18s ease,
+        border-color .18s ease,
+        background .18s ease,
+        transform .18s ease;
+}
+
+.challengeButton span {
+    letter-spacing: .2px;
+}
+
+.challengeButton:hover {
+    color: #fff !important;
+    border-color: rgba(112, 197, 46, .5) !important;
+    background: rgba(112, 197, 46, .12) !important;
+}
+
+.challengeButton:active {
+    transform: scale(.97);
+}
+
+.challengeCard {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+
+    width: 360px;
+    max-height: 480px;
+
+    padding: 18px;
+
+    border: 1px solid rgba(213, 237, 220, .1);
+    border-radius: 12px;
+
+    background: #151b17;
+
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, .35);
+
+    z-index: 100;
+}
+
+.challengeHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    margin-bottom: 16px;
+}
+
+.challengeHeader span {
+    color: #70c52e;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.challengeHeader strong {
+    color: #fff;
+    font-size: 16px;
 }
 
 @media (max-width: 620px) {
