@@ -1,7 +1,9 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useAuth } from "../../../auth/contexts/auth/useAuth"
+import { useCreateChallenge } from "../../../../packages/hooks/challenges/useCreateChallenge"
 import { useJoinMatchmaking } from "../../../../packages/hooks/players/useJoinMatchmaking"
+import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter"
+import { useAuth } from "../../../auth/contexts/auth/useAuth"
 import { Navbar } from "../../components/Navbar/Navbar"
 import { OnlineFriends } from "../../components/OnlineFriends/OnlineFriends"
 import { Performance } from "../../components/Performance/Performance"
@@ -9,7 +11,6 @@ import { PlayActions } from "../../components/PlayActions/PlayActions"
 import { QuickGames } from "../../components/QuickGames/QuickGames"
 import { SearchPlayers } from "../../components/SearchPlayers/SearchPlayers"
 import { useLobbyData } from "../../hooks/useLobbyData"
-import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter"
 import styles from "./Home.module.css"
 
 export function Home() {
@@ -18,6 +19,7 @@ export function Home() {
     const { games } = useLobbyData()
     const username = user?.username || "João"
     const [isPlayerSearchOpen, setIsPlayerSearchOpen] = useState(false)
+    const { mutateAsync: createChallenge } = useCreateChallenge()
     const { mutateAsync: joinMatchmaking, isPending: isJoiningMatchmaking } = useJoinMatchmaking()
 
     const handleJoinMatchmaking = async () => {
@@ -26,6 +28,22 @@ export function Home() {
         try {
             await joinMatchmaking(user.id)
             mensagemAdapter.success("Você entrou na fila de matchmaking.")
+        } catch (error) {
+            mensagemAdapter.error(error)
+        }
+    }
+
+    const handleCreateChallenge = async (friendUsername: string) => {
+        if (!user?.id) return
+
+        try {
+            await createChallenge({
+                challengedUsername: friendUsername,
+                initialTimeSeconds: 30,
+                incrementSeconds: 10,
+            })
+            mensagemAdapter.success("Solicitação de desafio enviada.")
+            navigate("/game")
         } catch (error) {
             mensagemAdapter.error(error)
         }
@@ -51,7 +69,7 @@ export function Home() {
 
                     <aside className={styles.rightRail}>
                         <OnlineFriends
-                            onChallenge={() => navigate("/game")}
+                            onChallenge={(friendUsername) => handleCreateChallenge(friendUsername)}
                             onSearchPanelChange={setIsPlayerSearchOpen}
                         />
                         {isPlayerSearchOpen && <SearchPlayers />}
