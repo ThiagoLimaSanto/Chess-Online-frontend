@@ -21,7 +21,7 @@ export function useCreateChallenge() {
             })
 
             queryClient.invalidateQueries({
-                queryKey: ["challenges", "received"],
+                queryKey: ["challenges", "received", "pending"],
             })
         },
     })

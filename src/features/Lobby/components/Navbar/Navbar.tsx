@@ -5,6 +5,7 @@ import { useGetSentFriendshipRequest } from "../../../../packages/hooks/players/
 
 import { Profile } from "../Profile/Profile"
 
+import { useReceivedChallenge } from "../../../../packages/hooks/challenges/useReceivedChallenge"
 import { useAcceptRequest } from "../../../../packages/hooks/players/useAcceptRequest"
 import { useRejectRequest } from "../../../../packages/hooks/players/useRejectRequest"
 import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter"
@@ -38,12 +39,15 @@ export function Navbar({
         size: 5,
     })
 
-    console.log(data)
+    const { data: challengesReceiveds } = useReceivedChallenge()
 
     const { mutateAsync: acceptRequest } = useAcceptRequest()
     const { mutateAsync: rejectRequest } = useRejectRequest()
 
-    const totalRequests = data?.totalElements ?? 0
+    const totalRequests =
+        (data?.totalElements ?? 0) +
+        (challengesReceiveds?.totalElements ?? 0) +
+        (sentRequests?.totalElements ?? 0)
 
     useEffect(() => {
 
@@ -59,6 +63,24 @@ export function Navbar({
         try {
             await acceptRequest(requesterId)
             mensagemAdapter.success("Amizade aceita!")
+        } catch (error) {
+            mensagemAdapter.error(error)
+        }
+    }
+
+    const handleAcceptChallenge = async (challengeId: string) => {
+        try {
+
+            mensagemAdapter.success("Desafio aceito!")
+        } catch (error) {
+            mensagemAdapter.error(error)
+        }
+    }
+
+    const handleRejectChallenge = async (challengeId: string) => {
+        try {
+
+            mensagemAdapter.success("Desafio rejeitado!")
         } catch (error) {
             mensagemAdapter.error(error)
         }
@@ -99,6 +121,9 @@ export function Navbar({
 
                     {isOpenRequests && (
                         <FriendshipRequests
+                            onAcceptChallenge={handleAcceptChallenge}
+                            onRejectChallenge={handleRejectChallenge}
+                            challengesReceiveds={challengesReceiveds?.content ?? []}
                             requests={data?.content ?? []}
                             sentRequests={sentRequests?.content ?? []}
                             search={search}
