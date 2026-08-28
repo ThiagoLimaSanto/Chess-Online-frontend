@@ -23,8 +23,12 @@ export function FriendshipRequests({
 }: FriendshipRequestsProps) {
 
     const containerRef = useRef<HTMLDivElement>(null)
-    const [activeTab, setActiveTab] = useState<"received" | "sent">("received")
-    const activeRequests = activeTab === "received" ? requests : sentRequests
+    const [activeTab, setActiveTab] = useState<"challenges" | "received" | "sent">("received")
+    const activeRequests = activeTab === "received"
+        ? requests
+        : activeTab === "sent"
+            ? sentRequests
+            : []
 
     useEffect(() => {
 
@@ -70,7 +74,16 @@ export function FriendshipRequests({
                 />
             </label>
 
-            <div className={styles.tabs} role="tablist" aria-label="Pedidos de amizade">
+            <div className={styles.tabs} role="tablist" aria-label="Notificações">
+                <button
+                    type="button"
+                    role="tab"
+                    aria-selected={activeTab === "challenges"}
+                    className={activeTab === "challenges" ? styles.activeTab : styles.tab}
+                    onClick={() => setActiveTab("challenges")}
+                >
+                    Desafios <span>0</span>
+                </button>
                 <button
                     type="button"
                     role="tab"
@@ -93,7 +106,9 @@ export function FriendshipRequests({
 
             {activeRequests.length === 0 ? (
                 <div className={styles.empty}>
-                    {activeTab === "received"
+                    {activeTab === "challenges"
+                        ? "Nenhum desafio recebido."
+                        : activeTab === "received"
                         ? "Nenhum pedido recebido."
                         : "Nenhum pedido enviado."}
                 </div>

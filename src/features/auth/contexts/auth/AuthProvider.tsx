@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
 import { clearAuthToken, setAuthToken } from "../../../../packages/auth/axios"
 import { useGetMe } from "../../../../packages/hooks/auth/useGetMe"
+import { useHeartbeat } from "../../../../packages/hooks/auth/useHeartbeat"
 import { useLogin } from "../../../../packages/hooks/auth/useLogin"
 import { useLogout } from "../../../../packages/hooks/auth/useLogout"
 import { useRegister } from "../../../../packages/hooks/auth/useRegister"
@@ -21,6 +22,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { mutateAsync: getMe } = getMeMutation
     const registerMutation = useRegister()
     const logoutMutation = useLogout()
+
+    useHeartbeat(user?.id)
 
     useEffect(() => {
         if (!localStorage.getItem("chess-auth-token")) return
