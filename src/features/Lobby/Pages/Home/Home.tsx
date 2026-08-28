@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../../../auth/contexts/auth/useAuth"
+import { useJoinMatchmaking } from "../../../../packages/hooks/players/useJoinMatchmaking"
 import { Navbar } from "../../components/Navbar/Navbar"
 import { OnlineFriends } from "../../components/OnlineFriends/OnlineFriends"
 import { Performance } from "../../components/Performance/Performance"
@@ -8,6 +9,7 @@ import { PlayActions } from "../../components/PlayActions/PlayActions"
 import { QuickGames } from "../../components/QuickGames/QuickGames"
 import { SearchPlayers } from "../../components/SearchPlayers/SearchPlayers"
 import { useLobbyData } from "../../hooks/useLobbyData"
+import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter"
 import styles from "./Home.module.css"
 
 export function Home() {
@@ -16,6 +18,18 @@ export function Home() {
     const { games } = useLobbyData()
     const username = user?.username || "João"
     const [isPlayerSearchOpen, setIsPlayerSearchOpen] = useState(false)
+    const { mutateAsync: joinMatchmaking, isPending: isJoiningMatchmaking } = useJoinMatchmaking()
+
+    const handleJoinMatchmaking = async () => {
+        if (!user?.id) return
+
+        try {
+            await joinMatchmaking(user.id)
+            mensagemAdapter.success("Você entrou na fila de matchmaking.")
+        } catch (error) {
+            mensagemAdapter.error(error)
+        }
+    }
 
     return (
         <main className={styles.home}>
@@ -29,7 +43,7 @@ export function Home() {
                 </div>
 
                 <div className={`${styles.dashboard} ${isPlayerSearchOpen ? styles.dashboardSearchOpen : ""}`}>
-                    <PlayActions onPlay={() => navigate("/game")} />
+                    <PlayActions onPlay={handleJoinMatchmaking} isLoading={isJoiningMatchmaking} />
 
                     <div className={styles.featureImage} role="img" aria-label="Peças de xadrez em um tabuleiro" />
 

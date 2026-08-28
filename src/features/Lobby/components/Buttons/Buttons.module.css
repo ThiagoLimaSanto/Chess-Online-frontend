@@ -23,3 +23,8 @@
 .primary:hover {
     background: linear-gradient(135deg, #a0e664, #73c83c);
 }
+
+.primary:disabled {
+    cursor: wait;
+    opacity: .7;
+}

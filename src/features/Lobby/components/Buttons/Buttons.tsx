@@ -1,13 +1,16 @@
 import styles from "./Buttons.module.css"
 
 type ButtonsProps = {
-    onPlay: () => void
+    onPlay: () => void | Promise<void>
+    isLoading?: boolean
 }
 
-export function Buttons({ onPlay }: ButtonsProps) {
+export function Buttons({ onPlay, isLoading = false }: ButtonsProps) {
     return (
         <div className={styles.actions}>
-            <button className={styles.primary} onClick={onPlay}>Jogar Agora</button>
+            <button className={styles.primary} onClick={() => void onPlay()} disabled={isLoading}>
+                {isLoading ? "Entrando na fila..." : "Jogar Agora"}
+            </button>
         </div>
     )
 }
