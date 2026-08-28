@@ -20,6 +20,12 @@ export function useSendFriendship() {
             queryClient.invalidateQueries({
                 queryKey: ["friendships"],
             })
+            queryClient.invalidateQueries({
+                queryKey: ["friendships-sent-requests"],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["players"],
+            })
         },
     })
 }

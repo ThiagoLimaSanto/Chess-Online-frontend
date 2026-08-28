@@ -1,22 +1,30 @@
 .searchPanel {
     position: absolute;
 
-    top: 0;
-    left: calc(100% + 14px);
+    top: calc(100% + 10px);
+    right: 0;
 
-    width: 260px;
-    padding: 12px;
+    width: 290px;
+    padding: 14px;
 
-    border: 1px solid #252a2b;
-    border-radius: 10px;
+    border: 1px solid rgba(184, 216, 202, 0.14);
+    border-radius: 14px;
 
-    background: #111516;
+    background: #141a1b;
 
     box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.35),
-        0 2px 8px rgba(0, 0, 0, 0.2);
+        0 20px 48px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, .04);
 
     z-index: 10;
+}
+
+@media (min-width: 901px) {
+    .searchPanel {
+        top: 0;
+        right: auto;
+        left: calc(100% + 14px);
+    }
 }
 
 .searchField {
@@ -49,12 +57,12 @@
     padding: 8px 10px 8px 32px;
 
     border: 1px solid #2a3030;
-    border-radius: 7px;
+    border-radius: 8px;
 
     outline: none;
 
     color: #e8eceb;
-    background: #0b0e0f;
+    background: #0d1213;
 
     font-size: 13px;
 
@@ -107,11 +115,11 @@
     padding: 8px 10px;
 
     border: 1px solid transparent;
-    border-radius: 7px;
+    border-radius: 8px;
 
     color: #d7dcda;
 
-    background: transparent;
+    background: rgba(255, 255, 255, .015);
 
     font-size: 13px;
 
@@ -122,9 +130,9 @@
 }
 
 .playerContainer:hover {
-    border-color: #252f2e;
+    border-color: rgba(112, 197, 46, .2);
 
-    background: #191e1f;
+    background: rgba(112, 197, 46, .08);
 
     color: #ffffff;
 }
@@ -159,11 +167,12 @@
     padding: 0;
 
     border: none;
-    border-radius: 6px;
+    border: 1px solid rgba(112, 197, 46, .25);
+    border-radius: 7px;
 
-    color: #aeb8b5;
+    color: #9cde70;
 
-    background: transparent;
+    background: rgba(112, 197, 46, .08);
 
     font-size: 16px;
 
@@ -175,9 +184,8 @@
 }
 
 .messageButton:hover {
-    color: #ffffff;
-
-    background: #252d2c;
+    color: #16250e;
+    background: #7bcc42;
 }
 
 .messageButton:active {
@@ -229,13 +237,11 @@
 
 /* Responsividade */
 
-@media (max-width: 620px) {
+@media (max-width: 900px) {
     .searchPanel {
         position: static;
 
         width: 100%;
-
-        margin-top: 14px;
 
         box-sizing: border-box;
     }

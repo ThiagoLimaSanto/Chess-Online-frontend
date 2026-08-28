@@ -4,11 +4,15 @@ import "simplebar-react/dist/simplebar.min.css"
 
 import { useGetFriendship } from "../../../../packages/hooks/players/useGetFriendship"
 import { Profile } from "../Profile/Profile"
-import { SearchPlayers } from "../SearchPlayers/SearchPlayers"
 
 import styles from "./OnlineFriends.module.css"
 
-export function OnlineFriends() {
+type OnlineFriendsProps = {
+    onChallenge: (friendUsername: string) => void
+    onSearchPanelChange: (isOpen: boolean) => void
+}
+
+export function OnlineFriends({ onChallenge, onSearchPanelChange }: OnlineFriendsProps) {
     const [isAddFriendOpen, setIsAddFriendOpen] = useState(false)
     const [username, setUsername] = useState("")
     const [search, setSearch] = useState("")
@@ -32,22 +36,10 @@ export function OnlineFriends() {
         return () => clearTimeout(time)
     }, [search])
 
-    if (isLoading) {
-        return (
-            <div className={styles.loading}>
-                <span className={styles.loadingDot} />
-                Carregando amigos...
-            </div>
-        )
-    }
-
-    if (isFetching) {
-        return (
-            <div className={styles.loading}>
-                <span className={styles.loadingDot} />
-                Buscando amigos...
-            </div>
-        )
+    const handleToggleSearchPanel = () => {
+        const nextIsOpen = !isAddFriendOpen
+        setIsAddFriendOpen(nextIsOpen)
+        onSearchPanelChange(nextIsOpen)
     }
 
     return (
@@ -58,19 +50,43 @@ export function OnlineFriends() {
                         <span>♟</span>
                         Amigos
                     </h2>
+                    <span className={styles.count}>{friends?.totalElements ?? 0}</span>
                 </div>
+
+                <label className={styles.searchField}>
+                    <span aria-hidden="true">⌕</span>
+                    <input
+                        type="search"
+                        value={search}
+                        onChange={(event) => setSearch(event.target.value)}
+                        placeholder="Buscar amigos"
+                        aria-label="Buscar amigos"
+                    />
+                </label>
 
                 <SimpleBar
                     className={styles.friendList}
                     autoHide={false}
                 >
-                    {friends?.content?.length ? (
+                    {isLoading || isFetching ? (
+                        <div className={styles.loading}>
+                            <span className={styles.loadingDot} />
+                            {isLoading ? "Carregando amigos..." : "Buscando amigos..."}
+                        </div>
+                    ) : friends?.content?.length ? (
                         friends.content.map((friend) => (
                             <div
                                 className={styles.friend}
                                 key={friend.id}
                             >
                                 <Profile username={friend.username} />
+                                <button
+                                    type="button"
+                                    className={styles.challenge}
+                                    onClick={() => onChallenge(friend.username)}
+                                >
+                                    Desafiar
+                                </button>
                             </div>
                         ))
                     ) : (
@@ -87,24 +103,16 @@ export function OnlineFriends() {
                 <button
                     type="button"
                     className={styles.add}
-                    onClick={() =>
-                        setIsAddFriendOpen((isOpen) => !isOpen)
-                    }
+                    onClick={handleToggleSearchPanel}
                     aria-expanded={isAddFriendOpen}
                 >
                     <span>
                         {isAddFriendOpen ? "−" : "+"}
                     </span>
 
-                    {isAddFriendOpen
-                        ? "Fechar busca"
-                        : "Adicionar amigo"}
+                    {isAddFriendOpen ? "Fechar painel" : "Adicionar amigo"}
                 </button>
             </section>
-
-            {isAddFriendOpen && (
-                <SearchPlayers />
-            )}
         </div>
     )
 }

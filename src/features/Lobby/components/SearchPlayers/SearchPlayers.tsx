@@ -44,12 +44,6 @@ export function SearchPlayers() {
         }
     }
 
-    if (isFetching) return <p>Buscando jogadores...</p>
-
-    if (isLoading) {
-        return <p>Carregando...</p>
-    }
-
     return (
         <section className={styles.searchPanel}>
 
@@ -71,13 +65,17 @@ export function SearchPlayers() {
 
             <div className={styles.results}>
 
-                {(data && !isFetching && data?.content?.length > 0) && (
-                    <p className={styles.sugestionTitle}>
-                        Players encontrados
+                {isLoading || isFetching ? (
+                    <p className={styles.status}>
+                        {isLoading ? "Carregando jogadores..." : "Buscando jogadores..."}
                     </p>
-                )}
+                ) : data?.content?.length ? (
+                    <p className={styles.sugestionTitle}>
+                        Jogadores encontrados
+                    </p>
+                ) : null}
 
-                {data?.content?.map((player) => (
+                {!isLoading && !isFetching && data?.content?.map((player) => (
                     <div
                         key={player.id}
                         className={styles.playerContainer}
@@ -90,7 +88,7 @@ export function SearchPlayers() {
                             className={styles.messageButton}
                             type="button"
                             onClick={() => handleSendRequest(player.id)}
-                            aria-label={`Enviar mensagem para ${player.username}`}
+                            aria-label={`Enviar pedido de amizade para ${player.username}`}
                         >
                             <FaUserPlus />
                         </button>
@@ -99,7 +97,7 @@ export function SearchPlayers() {
 
             </div>
 
-            {data?.content?.length === 0 && !isFetching && username !== "" && (
+            {data?.content?.length === 0 && !isFetching && !isLoading && username !== "" && (
                 <p className={styles.empty}>
                     Nenhum jogador encontrado.
                 </p>

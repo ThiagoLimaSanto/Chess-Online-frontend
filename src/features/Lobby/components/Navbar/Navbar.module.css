@@ -1,12 +1,12 @@
 .topbar {
-    width: calc(100vw - 36px);
-    height: 68px;
-    margin: 0 18px 18px calc(50% - 50vw + 18px);
-    padding-right: 0;
+    width: 100%;
+    height: 74px;
+    margin: 0 0 18px;
+    padding: 0 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #171b1c;
+    border-bottom: 1px solid rgba(213, 237, 220, .1);
 }
 
 .logo {
@@ -14,7 +14,8 @@
     align-items: center;
     gap: 11px;
     color: #fff;
-    font-size: 18px;
+    font-size: 17px;
+    letter-spacing: .8px;
     font-weight: 700;
 }
 
@@ -26,7 +27,7 @@
 .topActions {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 15px;
 }
 
 .topActions button {
@@ -38,18 +39,32 @@
 
 .logoutButton {
     padding: 8px 12px;
-    color: #fff;
-    font-size: 14px;
+    border: 1px solid rgba(255, 255, 255, .11) !important;
+    border-radius: 8px !important;
+    color: #d9e0db !important;
+    background: rgba(255, 255, 255, .035) !important;
+    font-size: 12px;
+    transition: color .18s ease, border-color .18s ease, background .18s ease;
 }
 
 .logoutButton:hover {
-    color: #f35643;
+    border-color: rgba(243, 86, 67, .45) !important;
+    color: #ff9c90 !important;
+    background: rgba(243, 86, 67, .08) !important;
 }
 
 .iconButton {
     position: relative;
-    font-size: 22px;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(255, 255, 255, .1) !important;
+    border-radius: 9px !important;
+    color: #dce6df !important;
+    background: rgba(255, 255, 255, .035) !important;
+    font-size: 17px;
+    transition: border-color .18s ease, background .18s ease;
 }
+.iconButton:hover { border-color: rgba(112, 197, 46, .45) !important; background: rgba(112, 197, 46, .1) !important; }
 
 .iconButton b {
     position: absolute;

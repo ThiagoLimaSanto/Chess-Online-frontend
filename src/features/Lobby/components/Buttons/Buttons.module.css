@@ -2,34 +2,24 @@
     width: 100%;
 }
 
-.primary,
-.secondary {
+.primary {
     width: 100%;
     min-height: 40px;
-    border: 1px solid #2a3030;
-    border-radius: 6px;
+    border: 1px solid #34403b;
+    border-radius: 8px;
     color: #e8ece8;
-    background: transparent;
+    background: rgba(255,255,255,.035);
     font-weight: 600;
     cursor: pointer;
 }
 
 .primary {
-    color: #102006;
-    border-color: #69b72e;
-    background: #63b72a;
+    color: #16270b;
+    border-color: #86d34e;
+    background: linear-gradient(135deg, #91da56, #68bd34);
+    box-shadow: 0 7px 16px rgba(68,145,31,.2);
 }
 
 .primary:hover {
-    background: #75cf35;
-}
-
-.secondary {
-    margin-top: 10px;
-    font-size: 12px;
-}
-
-.secondary:hover {
-    border-color: #5c9e32;
-    background: #18201a;
+    background: linear-gradient(135deg, #a0e664, #73c83c);
 }

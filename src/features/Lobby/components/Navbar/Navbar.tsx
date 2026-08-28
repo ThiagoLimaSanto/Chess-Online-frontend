@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 
 import { useGetFriendshipRequest } from "../../../../packages/hooks/players/useGetFriendshipRequest"
+import { useGetSentFriendshipRequest } from "../../../../packages/hooks/players/useGetSentFriendshipRequest"
 
 import { Profile } from "../Profile/Profile"
 
@@ -31,6 +32,13 @@ export function Navbar({
         page: 0,
         size: 5,
     })
+    const { data: sentRequests } = useGetSentFriendshipRequest({
+        username: usernameSearch,
+        page: 0,
+        size: 5,
+    })
+
+    console.log(data)
 
     const { mutateAsync: acceptRequest } = useAcceptRequest()
     const { mutateAsync: rejectRequest } = useRejectRequest()
@@ -92,6 +100,9 @@ export function Navbar({
                     {isOpenRequests && (
                         <FriendshipRequests
                             requests={data?.content ?? []}
+                            sentRequests={sentRequests?.content ?? []}
+                            search={search}
+                            onSearchChange={setSearch}
                             onAccept={handleAccept}
                             onReject={handleReject}
                             onClose={() => setIsOpenRequests(false)}

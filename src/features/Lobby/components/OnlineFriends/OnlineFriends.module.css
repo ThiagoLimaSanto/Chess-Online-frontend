@@ -47,6 +47,13 @@
 
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
+.count { display: inline-grid; min-width: 20px; height: 20px; place-items: center; margin-left: auto; border-radius: 999px; color: #a7e378; background: rgba(112, 197, 46, .12); font-size: 10px; font-weight: 700; }
+
+.searchField { position: relative; display: block; margin-bottom: 10px; }
+.searchField > span { position: absolute; top: 50%; left: 10px; color: #8c9893; font-size: 17px; transform: translateY(-54%); pointer-events: none; }
+.searchField input { width: 100%; height: 34px; padding: 0 10px 0 30px; border: 1px solid #293330; border-radius: 7px; outline: none; color: #eff5f0; background: #0d1213; font: inherit; font-size: 11px; transition: border-color .18s ease, box-shadow .18s ease; }
+.searchField input::placeholder { color: #75817c; }
+.searchField input:focus { border-color: #6dbd3d; box-shadow: 0 0 0 3px rgba(112, 197, 46, .12); }
 
 .heading h2 {
     display: flex;
@@ -68,9 +75,13 @@
 
 /* Lista */
 .friendList {
-    max-height: 168px;
+    height: 168px;
     padding-right: 7px;
 }
+
+.loading { min-height: 100%; display: grid; place-content: center; gap: 8px; color: #99a49f; font-size: 11px; text-align: center; }
+.loadingDot { width: 8px; height: 8px; margin: auto; border-radius: 50%; background: #78c943; box-shadow: 0 0 0 5px rgba(112, 197, 46, .13); animation: pulse 1s infinite alternate; }
+@keyframes pulse { to { transform: scale(.65); opacity: .55; } }
 
 /* Scrollbar */
 .friendList :global(.simplebar-scrollbar::before) {
@@ -98,7 +109,8 @@
 
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: space-between;
+    gap: 8px;
 
     margin-bottom: 2px;
     padding: 6px 8px;
@@ -121,6 +133,31 @@
 
 .friend > span:nth-child(2) {
     flex: 1;
+}
+
+.challenge {
+    flex: 0 0 auto;
+    min-height: 27px;
+    padding: 0 8px;
+    border: 1px solid rgba(112, 197, 46, .28);
+    border-radius: 7px;
+    color: #a5e57b;
+    background: rgba(112, 197, 46, .08);
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: color .18s ease, border-color .18s ease, background .18s ease;
+}
+
+.challenge:hover {
+    border-color: #83d64c;
+    color: #17250f;
+    background: #83d64c;
+}
+
+.challenge:focus-visible {
+    outline: 2px solid rgba(131, 214, 76, .65);
+    outline-offset: 2px;
 }
 
 .friend b,

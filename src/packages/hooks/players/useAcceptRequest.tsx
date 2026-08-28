@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "../../auth/axios"
+import type { FriendshipResponse, PageResponse } from "../types/response/PageResponse"
 
 async function acceptRequest(requesterId: string) {
     const response = await api.post(
@@ -13,9 +14,38 @@ export function useAcceptRequest() {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: acceptRequest,
-        onSuccess: () => {
+        onMutate: async (requesterId) => {
+            await queryClient.cancelQueries({ queryKey: ["friendships-requests"] })
+
+            const previousRequests = queryClient.getQueriesData<PageResponse<FriendshipResponse>>({
+                queryKey: ["friendships-requests"],
+            })
+
+            queryClient.setQueriesData<PageResponse<FriendshipResponse>>(
+                { queryKey: ["friendships-requests"] },
+                (current) => current && {
+                    ...current,
+                    content: current.content.filter((request) => request.id !== requesterId),
+                    totalElements: Math.max(0, current.totalElements - 1),
+                },
+            )
+
+            return { previousRequests }
+        },
+        onError: (_error, _requesterId, context) => {
+            context?.previousRequests.forEach(([queryKey, data]) => {
+                queryClient.setQueryData(queryKey, data)
+            })
+        },
+        onSettled: () => {
             queryClient.invalidateQueries({
                 queryKey: ["friendships-requests"],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["friendships-sent-requests"],
+            })
+            queryClient.invalidateQueries({
+                queryKey: ["friendships"],
             })
         },
     })

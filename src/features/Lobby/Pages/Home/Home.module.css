@@ -13,7 +13,7 @@
     min-height: 100vh;
     position: relative;
     isolation: isolate;
-    background: #080a0b;
+    background: #090d0d;
 }
 
 .home::before {
@@ -21,11 +21,11 @@
     position: absolute;
     inset: 68px 0 0;
     z-index: -1;
-    background: linear-gradient(rgba(8, 10, 11, .72), rgba(8, 10, 11, .82)), url("/chess.webp") center / cover;
+    background: radial-gradient(circle at 68% 15%, rgba(105, 174, 62, .1), transparent 32%), linear-gradient(rgba(8, 12, 12, .78), rgba(8, 12, 12, .93)), url("/chess.webp") center / cover;
 }
 
 .content {
-    width: min(100%, 1170px);
+    width: min(100%, 1200px);
     min-height: 100vh;
     margin: 0 auto;
     padding: 0 18px 30px;
@@ -67,17 +67,32 @@
 
 .featureImage {
     min-height: 282px;
-    border: 1px solid #252a2b;
-    border-radius: 9px;
-    background: linear-gradient(90deg, rgba(3, 7, 4, .05), rgba(3, 7, 4, .3)), url("/chess.webp") center / cover;
+    border: 1px solid rgba(190, 218, 198, .14);
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(5, 16, 8, .08), rgba(3, 10, 7, .55)), url("/chess.webp") center / cover;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, .2);
 }
 
 .rightRail {
     grid-column: 3;
     grid-row: 1 / span 2;
+    position: relative;
     display: grid;
     align-content: start;
     gap: 13px;
+}
+
+/* Com a busca aberta, reduz a coluna central para acomodar o painel lateral. */
+@media (min-width: 901px) and (max-width: 1200px) {
+    .dashboardSearchOpen {
+        grid-template-columns: 230px max(0px, calc(100vw - 838px)) 258px;
+    }
+}
+
+@media (min-width: 1201px) and (max-width: 1844px) {
+    .dashboardSearchOpen {
+        grid-template-columns: 230px calc(50vw - 238px) 258px;
+    }
 }
 
 @media (max-width: 900px) {
