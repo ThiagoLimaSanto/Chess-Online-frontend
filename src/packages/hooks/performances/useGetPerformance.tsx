@@ -12,5 +12,6 @@ export function useGetPerformance(userId: string) {
         queryFn: async () => {
             return await getPerformanceRequest(userId)
         },
+        enabled: Boolean(userId),
     })
 }

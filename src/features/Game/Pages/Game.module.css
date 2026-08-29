@@ -1,0 +1,94 @@
+.gamePage {
+    min-height: 100vh;
+    background: radial-gradient(circle at 50% 38%, rgba(74, 128, 52, .14), transparent 36%), linear-gradient(125deg, #070c0b, #0c1411 56%, #080c0b);
+    color: #edf1eb;
+}
+
+.content {
+    width: min(100%, 1240px);
+    min-height: 100vh;
+    margin: auto;
+    padding: 0 18px 38px;
+}
+
+.breadcrumb {
+    margin: 2px 0 24px;
+    font-size: 12px;
+}
+
+.breadcrumb button {
+    border: 0;
+    padding: 0;
+    color: #72c940;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+}
+
+.breadcrumb span {
+    display: none;
+}
+
+.gameLayout {
+    display: grid;
+    grid-template-columns: 250px minmax(410px, 465px) 238px;
+    justify-content: center;
+    align-items: start;
+    gap: 22px;
+}
+
+.leftPanel,
+.boardColumn {
+    display: grid;
+    gap: 16px;
+}
+
+@media (max-width: 1020px) {
+    .gameLayout {
+        grid-template-columns: 210px minmax(380px, 465px);
+    }
+
+    .gameLayout> :last-child {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .leftPanel {
+        gap: 12px;
+    }
+}
+
+@media (max-width: 700px) {
+    .content {
+        padding-inline: 12px;
+    }
+
+    .gameLayout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .leftPanel {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .leftPanel> :first-child {
+        grid-column: 1 / -1;
+    }
+
+    .boardColumn {
+        order: -1;
+    }
+
+    .gameLayout> :last-child {
+        grid-column: auto;
+    }
+}
+
+@media (max-width: 460px) {
+
+    .leftPanel,
+    .gameLayout> :last-child {
+        grid-template-columns: 1fr;
+    }
+}

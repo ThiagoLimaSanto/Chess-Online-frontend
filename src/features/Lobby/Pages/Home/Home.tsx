@@ -1,9 +1,10 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useCreateChallenge } from "../../../../packages/hooks/challenges/useCreateChallenge"
 import { useGetPerformance } from "../../../../packages/hooks/performances/useGetPerformance"
 import { useGetGameHistory } from "../../../../packages/hooks/players/useGetGameHistory"
 import { useJoinMatchmaking } from "../../../../packages/hooks/players/useJoinMatchmaking"
+import { useMatchmakingQueueStatus } from "../../../../packages/hooks/players/useMatchmakingQueueStatus"
 import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter"
 import { useAuth } from "../../../auth/contexts/auth/useAuth"
 import { Navbar } from "../../components/Navbar/Navbar"
@@ -17,20 +18,36 @@ import styles from "./Home.module.css"
 export function Home() {
     const navigate = useNavigate()
     const { user, logout } = useAuth()
-    if (!user) return null
-    const { data: performance = [] } = useGetPerformance(user.id);
-    const { data: games = [] } = useGetGameHistory(user.id);
-    const username = user?.username || "Anonymous"
+    const userId = user?.id ?? ""
+    const { data: performance } = useGetPerformance(userId);
+    const { data: games = [] } = useGetGameHistory(userId);
     const [isPlayerSearchOpen, setIsPlayerSearchOpen] = useState(false)
+    const [isSearchingMatch, setIsSearchingMatch] = useState(false)
     const { mutateAsync: createChallenge } = useCreateChallenge()
     const { mutateAsync: joinMatchmaking, isPending: isJoiningMatchmaking } = useJoinMatchmaking()
+    const { data: isInMatchmakingQueue, refetch: refetchQueueStatus } = useMatchmakingQueueStatus(
+        userId,
+        isSearchingMatch,
+    )
+
+    useEffect(() => {
+        if (isSearchingMatch && isInMatchmakingQueue === false) {
+            navigate("/game")
+        }
+    }, [isInMatchmakingQueue, isSearchingMatch, navigate])
+
+    if (!user) return null
+
+    const username = user.username
 
     const handleJoinMatchmaking = async () => {
         if (!user?.id) return
 
         try {
             await joinMatchmaking(user.id)
-            mensagemAdapter.success("Você entrou na fila de matchmaking.")
+            const queueStatus = await refetchQueueStatus()
+            setIsSearchingMatch(queueStatus.data === true)
+            mensagemAdapter.success("Buscando um oponente...")
         } catch (error) {
             mensagemAdapter.error(error)
         }
@@ -64,11 +81,14 @@ export function Home() {
                 </div>
 
                 <div className={`${styles.dashboard} ${isPlayerSearchOpen ? styles.dashboardSearchOpen : ""}`}>
-                    <PlayActions onPlay={handleJoinMatchmaking} isLoading={isJoiningMatchmaking} />
+                    <PlayActions
+                        onPlay={handleJoinMatchmaking}
+                        isSearching={isJoiningMatchmaking || isSearchingMatch}
+                    />
 
                     <div className={styles.featureImage} role="img" aria-label="Peças de xadrez em um tabuleiro" />
 
-                    <QuickGames username={username} games={games} onOpenGame={() => navigate("/game")} />
+                    <QuickGames username={username} games={games} onOpenGame={(gameId) => navigate(`/game/${gameId}`)} />
 
                     <aside className={styles.rightRail}>
                         <OnlineFriends
