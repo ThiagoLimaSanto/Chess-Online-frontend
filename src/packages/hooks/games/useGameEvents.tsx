@@ -42,6 +42,9 @@ export function useGameEvents(gameId: string) {
                     const event = JSON.parse(message.body) as GameEvent
                     if (event.gameId === gameId) {
                         void queryClient.invalidateQueries({ queryKey: ["game", gameId] })
+                        if (event.type === "GAME_FINISHED" || event.type === "GAME_ABANDONED") {
+                            void queryClient.invalidateQueries({ queryKey: ["performance"] })
+                        }
                     }
                 } catch {
                     // Ignora mensagens que não pertencem ao contrato de eventos da partida.

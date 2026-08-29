@@ -1,3 +1,98 @@
-.card { min-height: 151px; padding: 17px 15px; border: 1px solid rgba(192, 218, 197, .13); border-radius: 9px; background: linear-gradient(145deg, rgba(20, 28, 27, .96), rgba(13, 20, 19, .95)); box-shadow: 0 12px 28px rgba(0,0,0,.2); }.card h2 { margin: 0 0 18px; color: #edf1eb; font-family: Georgia, serif; font-size: 13px; }.captured { display: flex; flex-wrap: wrap; gap: 11px 12px; max-width: 145px; }.captured span { color: #111; font-family: Georgia, serif; font-size: 26px; text-shadow: 0 1px rgba(255,255,255,.38); }.captured span:nth-child(n + 4) { color: #f3f1e7; text-shadow: 0 1px 2px #000; }.card strong { display: block; margin: 6px 0 10px; color: #79c940; font-size: 21px; }.card p { margin: 0; color: #a7b0ab; font-size: 12px; }
+.card {
+    min-height: 151px;
+    padding: 17px 15px;
+    border: 1px solid rgba(192, 218, 197, .13);
+    border-radius: 9px;
+    background: linear-gradient(145deg, rgba(20, 28, 27, .96), rgba(13, 20, 19, .95));
+    box-shadow: 0 12px 28px rgba(0, 0, 0, .2);
+}
 
-@media (max-width: 760px) { .card { min-height: 120px; padding: 14px; }.card h2 { margin-bottom: 12px; }.captured span { font-size: 23px; } }
+.card h2 {
+    margin: 0 0 18px;
+    color: #edf1eb;
+    font-family: Georgia, serif;
+    font-size: 13px;
+}
+
+.capturedGroups {
+    display: grid;
+    gap: 12px;
+}
+
+.capturedRow {
+    display: grid;
+    gap: 4px;
+}
+
+.capturedRow small {
+    color: #87938b;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+}
+
+.captured {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 7px;
+}
+
+.captured span {
+    font-family: Georgia, serif;
+    font-size: 26px;
+    line-height: 1;
+}
+
+.captured .whitePiece {
+    color: #f3f1e7;
+    text-shadow: 0 1px 2px #000;
+}
+
+.captured .blackPiece {
+    color: #111;
+    text-shadow: 0 1px rgba(255, 255, 255, .38);
+}
+
+.card strong {
+    display: block;
+    margin: 6px 0 10px;
+    font-size: 21px;
+}
+
+.card strong.ahead {
+    color: #79c940;
+}
+
+.card strong.behind {
+    color: #ef6258;
+}
+
+.card strong.equal {
+    color: #b9c2bb;
+}
+
+.card p,
+.empty {
+    margin: 0;
+    color: #a7b0ab;
+    font-size: 12px;
+}
+
+.empty {
+    padding-top: 6px;
+}
+
+@media (max-width: 760px) {
+    .card {
+        min-height: 120px;
+        padding: 14px;
+    }
+
+    .card h2 {
+        margin-bottom: 12px;
+    }
+
+    .captured span {
+        font-size: 23px;
+    }
+}

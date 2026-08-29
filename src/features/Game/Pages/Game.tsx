@@ -51,6 +51,9 @@ export function Game() {
     const board = createBoard(game.board, playerColor)
     const isPlayerTurn = game.status === "IN_PROGRESS"
         && (game.moves.length % 2 === 0 ? playerColor === "WHITE" : playerColor === "BLACK")
+    const turnPlayerName = game.moves.length % 2 === 0
+        ? game.whitePlayerUsername
+        : game.blackPlayerUsername
     const moves = game.moves.reduce<string[][]>((rows, move, index) => {
         const notation = `${move.fromSquare}–${move.toSquare}`
         if (index % 2 === 0) rows.push([notation, ""])
@@ -72,7 +75,12 @@ export function Game() {
                 <section className={styles.gameLayout} aria-label="Partida de xadrez">
                     <aside className={styles.leftPanel}>
                         <PlayerCard name={opponentName} color={opponentColor} rating={opponentPerformance?.rating} gamesPlayed={opponentPerformance?.gamesPlayed} victories={opponentPerformance?.victories} time="10:00" tone="opponent" />
-                        <GameSummary />
+                        <GameSummary
+                            board={game.board}
+                            moves={game.moves}
+                            playerColor={playerColor}
+                            whitePlayerId={game.whitePlayer}
+                        />
                     </aside>
 
                     <div className={styles.boardColumn}>
@@ -84,12 +92,20 @@ export function Game() {
                             perspective={playerColor}
                             isPlayerTurn={isPlayerTurn}
                             gameStatus={game.status}
+                            turnPlayerName={turnPlayerName}
                         />
 
                         <PlayerCard name={user.username} color={playerColor} rating={playerPerformance?.rating} gamesPlayed={playerPerformance?.gamesPlayed} victories={playerPerformance?.victories} time="10:00" tone="you" />
                     </div>
 
-                    <GameDetails moves={moves} initialTimeSeconds={game.initialTimeSeconds} incrementSeconds={game.incrementSeconds} onUnavailable={unavailable} />
+                    <GameDetails
+                        moves={moves}
+                        initialTimeSeconds={game.initialTimeSeconds}
+                        incrementSeconds={game.incrementSeconds}
+                        playerRating={playerPerformance?.rating}
+                        opponentRating={opponentPerformance?.rating}
+                        onUnavailable={unavailable}
+                    />
                 </section>
             </div>
         </main>

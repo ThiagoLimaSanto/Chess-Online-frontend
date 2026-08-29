@@ -12,6 +12,7 @@ type GameBoardProps = {
     perspective: "WHITE" | "BLACK"
     isPlayerTurn: boolean
     gameStatus: "IN_PROGRESS" | "FINISHED"
+    turnPlayerName: string
 }
 
 type PendingPromotion = { toSquare: string }
@@ -23,7 +24,7 @@ const promotionPieces: Record<PromotionType, string> = {
     KNIGHT: "Cavalo",
 }
 
-export function GameBoard({ gameId, playerId, board, perspective, isPlayerTurn, gameStatus }: GameBoardProps) {
+export function GameBoard({ gameId, playerId, board, perspective, isPlayerTurn, gameStatus, turnPlayerName }: GameBoardProps) {
     const [selectedSquare, setSelectedSquare] = useState<string | null>(null)
     const [selectedPiece, setSelectedPiece] = useState("")
     const [pendingPromotion, setPendingPromotion] = useState<PendingPromotion | null>(null)
@@ -80,6 +81,12 @@ export function GameBoard({ gameId, playerId, board, perspective, isPlayerTurn, 
     }
 
     return <div className={styles.frame}>
+        <div className={`${styles.turnIndicator} ${isPlayerTurn ? styles.yourTurn : ""}`} role="status">
+            <span aria-hidden="true" />
+            {gameStatus === "FINISHED"
+                ? <strong>Partida encerrada</strong>
+                : <><small>Vez de</small><strong>{isPlayerTurn ? `${turnPlayerName} (você)` : turnPlayerName}</strong></>}
+        </div>
         <div className={styles.files} aria-hidden="true">{files.split("").map((file) => <span key={file}>{file}</span>)}</div>
         <div className={styles.board} aria-label="Tabuleiro de xadrez">
             {board.flatMap((row, rowIndex) => row.map((piece, columnIndex) => {

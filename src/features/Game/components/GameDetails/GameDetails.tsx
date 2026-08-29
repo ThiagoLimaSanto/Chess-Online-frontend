@@ -4,6 +4,8 @@ type GameDetailsProps = {
     moves: string[][];
     initialTimeSeconds: number;
     incrementSeconds: number;
+    playerRating?: number;
+    opponentRating?: number;
     onUnavailable: () => void;
 };
 
@@ -11,8 +13,14 @@ export function GameDetails({
     moves,
     initialTimeSeconds,
     incrementSeconds,
+    playerRating = 1200,
+    opponentRating = 1200,
     onUnavailable,
 }: GameDetailsProps) {
+    const expectedScore = 1 / (1 + 10 ** ((opponentRating - playerRating) / 400));
+    const victoryChange = Math.round(32 * (1 - expectedScore));
+    const lossChange = Math.round(32 * -expectedScore);
+
     return (
         <aside className={styles.sidePanel}>
             <section className={styles.panel}>
@@ -52,7 +60,7 @@ export function GameDetails({
                 <p>− Rating em jogo</p>
 
                 <p className={styles.ratingChange}>
-                    Vitória <b>+24</b> · Derrota <em>-18</em>
+                    Vitória <b>+{victoryChange}</b> · Derrota <em>{lossChange}</em>
                 </p>
 
                 <div className={styles.actions}>

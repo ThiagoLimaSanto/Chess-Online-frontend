@@ -7,6 +7,46 @@
     box-shadow: 0 18px 42px rgba(0, 0, 0, .26);
 }
 
+.turnIndicator {
+    display: flex;
+    align-items: center;
+    min-height: 32px;
+    margin: -4px 0 8px;
+    padding: 0 4px;
+    color: #aab5ad;
+    font-size: 11px;
+}
+
+.turnIndicator > span {
+    width: 7px;
+    height: 7px;
+    margin-right: 8px;
+    border-radius: 50%;
+    background: #78837b;
+    box-shadow: 0 0 8px rgba(120, 131, 123, .35);
+}
+
+.turnIndicator small {
+    margin-right: 5px;
+    color: #87928a;
+    font-size: inherit;
+}
+
+.turnIndicator strong {
+    color: #e8ede8;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.turnIndicator.yourTurn > span {
+    background: #79c940;
+    box-shadow: 0 0 10px rgba(121, 201, 64, .75);
+}
+
+.turnIndicator.yourTurn strong {
+    color: #91db5c;
+}
+
 .board {
     width: 100%;
     aspect-ratio: 1;
@@ -92,6 +132,17 @@
 @media (max-width: 760px) {
     .frame {
         padding: 7px;
+    }
+
+    .turnIndicator {
+        min-height: 28px;
+        margin: -2px 0 6px;
+        padding: 0 3px;
+        font-size: 10px;
+    }
+
+    .turnIndicator strong {
+        font-size: 11px;
     }
 
     .files {
