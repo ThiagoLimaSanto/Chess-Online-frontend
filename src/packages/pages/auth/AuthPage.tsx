@@ -31,10 +31,8 @@ export function AuthPage({ mode: initialMode = 'login', handle }: { mode?: AuthM
             return
         } catch (error) {
             mensagemAdapter.error(error)
+            return
         }
-
-        mensagemAdapter.success("Conta criada com sucesso!")
-        navigate("/login")
     }
 
     const isRegister = mode === 'register'

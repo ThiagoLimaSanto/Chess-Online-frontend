@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useCreateChallenge } from "../../../../packages/hooks/challenges/useCreateChallenge"
+import { useGetPerformance } from "../../../../packages/hooks/performances/useGetPerformance"
 import { useJoinMatchmaking } from "../../../../packages/hooks/players/useJoinMatchmaking"
 import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter"
 import { useAuth } from "../../../auth/contexts/auth/useAuth"
@@ -17,6 +18,8 @@ export function Home() {
     const navigate = useNavigate()
     const { user, logout } = useAuth()
     const { games } = useLobbyData()
+    if (!user) return null
+    const { data: performance, isLoading } = useGetPerformance(user.id);
     const username = user?.username || "João"
     const [isPlayerSearchOpen, setIsPlayerSearchOpen] = useState(false)
     const { mutateAsync: createChallenge } = useCreateChallenge()
@@ -73,7 +76,7 @@ export function Home() {
                             onSearchPanelChange={setIsPlayerSearchOpen}
                         />
                         {isPlayerSearchOpen && <SearchPlayers />}
-                        <Performance />
+                        <Performance performance={performance} />
                     </aside>
                 </div>
             </section>
