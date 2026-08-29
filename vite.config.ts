@@ -14,6 +14,11 @@ export default defineConfig(({ mode }) => {
           target: env.VITE_API_TARGET ?? 'http://localhost:3000',
           changeOrigin: true,
         },
+        '/ws': {
+          target: env.VITE_API_TARGET ?? 'http://localhost:3000',
+          changeOrigin: true,
+          ws: true,
+        },
       },
     },
   }

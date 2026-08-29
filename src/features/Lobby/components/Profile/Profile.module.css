@@ -23,7 +23,7 @@
 }
 
 @media (max-width: 620px) {
-    .profile>span:last-child {
+    .username {
         display: none;
     }
 }

@@ -37,3 +37,7 @@ export function setAuthToken(token: string) {
 export function clearAuthToken() {
 	localStorage.removeItem(TOKEN_KEY)
 }
+
+export function getAuthToken() {
+	return localStorage.getItem(TOKEN_KEY)
+}

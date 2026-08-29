@@ -4,7 +4,7 @@ import { useCreateChallenge } from "../../../../packages/hooks/challenges/useCre
 import { useGetPerformance } from "../../../../packages/hooks/performances/useGetPerformance"
 import { useGetGameHistory } from "../../../../packages/hooks/players/useGetGameHistory"
 import { useJoinMatchmaking } from "../../../../packages/hooks/players/useJoinMatchmaking"
-import { useMatchmakingQueueStatus } from "../../../../packages/hooks/players/useMatchmakingQueueStatus"
+import { useCurrentMatch } from "../../../../packages/hooks/players/useCurrentMatch"
 import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter"
 import { useAuth } from "../../../auth/contexts/auth/useAuth"
 import { Navbar } from "../../components/Navbar/Navbar"
@@ -25,16 +25,13 @@ export function Home() {
     const [isSearchingMatch, setIsSearchingMatch] = useState(false)
     const { mutateAsync: createChallenge } = useCreateChallenge()
     const { mutateAsync: joinMatchmaking, isPending: isJoiningMatchmaking } = useJoinMatchmaking()
-    const { data: isInMatchmakingQueue, refetch: refetchQueueStatus } = useMatchmakingQueueStatus(
-        userId,
-        isSearchingMatch,
-    )
+    const { data: currentMatch } = useCurrentMatch(isSearchingMatch)
 
     useEffect(() => {
-        if (isSearchingMatch && isInMatchmakingQueue === false) {
-            navigate("/game")
+        if (isSearchingMatch && currentMatch) {
+            navigate(`/game/${currentMatch.id}`)
         }
-    }, [isInMatchmakingQueue, isSearchingMatch, navigate])
+    }, [currentMatch, isSearchingMatch, navigate])
 
     if (!user) return null
 
@@ -44,11 +41,17 @@ export function Home() {
         if (!user?.id) return
 
         try {
-            await joinMatchmaking(user.id)
-            const queueStatus = await refetchQueueStatus()
-            setIsSearchingMatch(queueStatus.data === true)
+            setIsSearchingMatch(true)
+            const game = await joinMatchmaking(user.id)
+
+            if (game) {
+                navigate(`/game/${game.id}`)
+                return
+            }
+
             mensagemAdapter.success("Buscando um oponente...")
         } catch (error) {
+            setIsSearchingMatch(false)
             mensagemAdapter.error(error)
         }
     }

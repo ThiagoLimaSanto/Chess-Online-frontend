@@ -174,7 +174,63 @@
 }
 
 @media (max-width: 620px) {
+    .topbar {
+        height: 62px;
+        margin-bottom: 12px;
+        padding-inline: 2px;
+    }
+
+    .logo {
+        gap: 6px;
+        font-size: 13px;
+    }
+
+    .logo span {
+        font-size: 25px;
+    }
+
     .topActions {
-        gap: 13px;
+        gap: 7px;
+    }
+
+    .challengeButton {
+        width: 36px;
+        padding: 0 !important;
+    }
+
+    .challengeButton > span {
+        display: none;
+    }
+
+    .logoutButton {
+        width: 36px;
+        padding: 8px !important;
+        font-size: 0;
+    }
+
+    .logoutButton span {
+        font-size: 15px;
+    }
+
+    .challengeCard {
+        position: fixed;
+        top: 68px;
+        right: 10px;
+        left: 10px;
+        width: auto;
+        max-height: calc(100vh - 80px);
+    }
+}
+
+@media (max-width: 390px) {
+    .topActions {
+        gap: 5px;
+    }
+
+    .iconButton,
+    .challengeButton,
+    .logoutButton {
+        width: 32px;
+        height: 32px;
     }
 }
