@@ -19,7 +19,7 @@ export function Home() {
     const { user, logout } = useAuth()
     const { games } = useLobbyData()
     if (!user) return null
-    const { data: performance, isLoading } = useGetPerformance(user.id);
+    const { data: performance } = useGetPerformance(user.id);
     const username = user?.username || "João"
     const [isPlayerSearchOpen, setIsPlayerSearchOpen] = useState(false)
     const { mutateAsync: createChallenge } = useCreateChallenge()
