@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useCreateChallenge } from "../../../../packages/hooks/challenges/useCreateChallenge"
 import { useGetPerformance } from "../../../../packages/hooks/performances/useGetPerformance"
+import { useGetGameHistory } from "../../../../packages/hooks/players/useGetGameHistory"
 import { useJoinMatchmaking } from "../../../../packages/hooks/players/useJoinMatchmaking"
 import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter"
 import { useAuth } from "../../../auth/contexts/auth/useAuth"
@@ -11,16 +12,15 @@ import { Performance } from "../../components/Performance/Performance"
 import { PlayActions } from "../../components/PlayActions/PlayActions"
 import { QuickGames } from "../../components/QuickGames/QuickGames"
 import { SearchPlayers } from "../../components/SearchPlayers/SearchPlayers"
-import { useLobbyData } from "../../hooks/useLobbyData"
 import styles from "./Home.module.css"
 
 export function Home() {
     const navigate = useNavigate()
     const { user, logout } = useAuth()
-    const { games } = useLobbyData()
     if (!user) return null
-    const { data: performance } = useGetPerformance(user.id);
-    const username = user?.username || "João"
+    const { data: performance = [] } = useGetPerformance(user.id);
+    const { data: games = [] } = useGetGameHistory(user.id);
+    const username = user?.username || "Anonymous"
     const [isPlayerSearchOpen, setIsPlayerSearchOpen] = useState(false)
     const { mutateAsync: createChallenge } = useCreateChallenge()
     const { mutateAsync: joinMatchmaking, isPending: isJoiningMatchmaking } = useJoinMatchmaking()
