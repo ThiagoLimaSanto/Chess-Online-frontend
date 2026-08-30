@@ -4,6 +4,7 @@ import type {
     ChallengeResponse,
     FriendshipResponse,
 } from "../../../../packages/hooks/types/response/PageResponse"
+import { getGameModeFromTimeControl } from "../../../../packages/constants/gameModes"
 
 import styles from "./FriendshipRequest.module.css"
 
@@ -107,7 +108,13 @@ export function FriendshipRequests({
                 ) : (
                     <div className={styles.list}>
                         {challengesReceiveds.map(
-                            (challenge) => (
+                            (challenge) => {
+                                const gameMode = getGameModeFromTimeControl(
+                                    challenge.initialTimeSeconds,
+                                    challenge.incrementSeconds,
+                                )
+
+                                return (
                                 <div
                                     key={challenge.id}
                                     className={styles.request}
@@ -123,10 +130,9 @@ export function FriendshipRequests({
                                                 .toUpperCase()}
                                         </div>
 
-                                        <span>
-                                            {
-                                                challenge.challengerUsername
-                                            }
+                                        <span className={styles.userDetails}>
+                                            <strong>{challenge.challengerUsername}</strong>
+                                            <small>{gameMode.label} · {gameMode.timeLabel}</small>
                                         </span>
                                     </div>
 
@@ -164,7 +170,8 @@ export function FriendshipRequests({
                                         </button>
                                     </div>
                                 </div>
-                            )
+                                )
+                            }
                         )}
                     </div>
                 )}

@@ -16,3 +16,10 @@ export const GAME_MODES: Array<{
 export function getGameMode(mode: GameMode) {
     return GAME_MODES.find((option) => option.value === mode) ?? GAME_MODES[2]
 }
+
+export function getGameModeFromTimeControl(initialTimeSeconds: number, incrementSeconds: number) {
+    return GAME_MODES.find((option) =>
+        option.initialTimeSeconds === initialTimeSeconds
+        && option.incrementSeconds === incrementSeconds
+    ) ?? GAME_MODES[2]
+}

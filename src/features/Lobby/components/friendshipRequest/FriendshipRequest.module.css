@@ -68,6 +68,27 @@
     font-size: 13px;
 }
 
+.userDetails {
+    min-width: 0;
+}
+
+.userDetails strong,
+.userDetails small {
+    display: block;
+}
+
+.userDetails strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.userDetails small {
+    margin-top: 3px;
+    color: #91a099;
+    font-size: 10px;
+}
+
 .avatar {
     width: 34px;
     height: 34px;

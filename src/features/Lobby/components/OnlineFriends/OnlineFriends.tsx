@@ -3,12 +3,14 @@ import SimpleBar from "simplebar-react"
 import "simplebar-react/dist/simplebar.min.css"
 
 import { useGetFriendship } from "../../../../packages/hooks/players/useGetFriendship"
+import type { GameMode } from "../../../../packages/constants/gameModes"
+import { ChallengeModePicker } from "../ChallengeModePicker/ChallengeModePicker"
 import { Profile } from "../Profile/Profile"
 
 import styles from "./OnlineFriends.module.css"
 
 type OnlineFriendsProps = {
-    onChallenge: (friendUsername: string) => void
+    onChallenge: (friendUsername: string, gameMode: GameMode) => void | Promise<void>
     onSearchPanelChange: (isOpen: boolean) => void
     challengeDisabled?: boolean
     isChallengePending?: boolean
@@ -23,6 +25,7 @@ export function OnlineFriends({
     const [isAddFriendOpen, setIsAddFriendOpen] = useState(false)
     const [username, setUsername] = useState("")
     const [search, setSearch] = useState("")
+    const [challengeFriend, setChallengeFriend] = useState<string | null>(null)
 
     const {
         data: friends,
@@ -82,19 +85,35 @@ export function OnlineFriends({
                         </div>
                     ) : friends?.content?.length ? (
                         friends.content.map((friend) => (
-                            <div
-                                className={styles.friend}
-                                key={friend.id}
-                            >
-                                <Profile username={friend.username} />
-                                <button
-                                    type="button"
-                                    className={styles.challenge}
-                                    onClick={() => onChallenge(friend.username)}
-                                    disabled={challengeDisabled || isChallengePending}
-                                >
-                                    {challengeDisabled ? "Em partida" : isChallengePending ? "Enviando..." : "Desafiar"}
-                                </button>
+                            <div className={styles.friendEntry} key={friend.id}>
+                                <div className={styles.friend}>
+                                    <Profile username={friend.username} />
+                                    <button
+                                        type="button"
+                                        className={styles.challenge}
+                                        onClick={() => setChallengeFriend((current) =>
+                                            current === friend.username ? null : friend.username
+                                        )}
+                                        disabled={challengeDisabled || isChallengePending}
+                                        aria-expanded={challengeFriend === friend.username}
+                                        aria-controls={`challenge-modes-${friend.id}`}
+                                    >
+                                        {challengeDisabled ? "Em partida" : isChallengePending ? "Enviando..." : "Desafiar"}
+                                    </button>
+                                </div>
+
+                                {challengeFriend === friend.username && (
+                                    <ChallengeModePicker
+                                        id={`challenge-modes-${friend.id}`}
+                                        friendUsername={friend.username}
+                                        disabled={isChallengePending}
+                                        onSelect={(mode) => {
+                                            setChallengeFriend(null)
+                                            void onChallenge(friend.username, mode)
+                                        }}
+                                        onCancel={() => setChallengeFriend(null)}
+                                    />
+                                )}
                             </div>
                         ))
                     ) : (

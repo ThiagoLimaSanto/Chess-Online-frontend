@@ -68,7 +68,7 @@ export function Home() {
         }
     }
 
-    const handleCreateChallenge = async (friendUsername: string) => {
+    const handleCreateChallenge = async (friendUsername: string, gameMode: GameMode) => {
         if (!user?.id) return
         if (currentMatch) {
             mensagemAdapter.error(null, "Você já está em uma partida em andamento.")
@@ -76,7 +76,7 @@ export function Home() {
         }
 
         try {
-            const mode = getGameMode(selectedGameMode)
+            const mode = getGameMode(gameMode)
             await createChallenge({
                 challengedUsername: friendUsername,
                 initialTimeSeconds: mode.initialTimeSeconds,
@@ -114,7 +114,7 @@ export function Home() {
 
                     <aside className={styles.rightRail}>
                         <OnlineFriends
-                            onChallenge={(friendUsername) => handleCreateChallenge(friendUsername)}
+                            onChallenge={handleCreateChallenge}
                             onSearchPanelChange={setIsPlayerSearchOpen}
                             challengeDisabled={Boolean(currentMatch)}
                             isChallengePending={isCreatingChallenge}
