@@ -10,9 +10,16 @@ import styles from "./OnlineFriends.module.css"
 type OnlineFriendsProps = {
     onChallenge: (friendUsername: string) => void
     onSearchPanelChange: (isOpen: boolean) => void
+    challengeDisabled?: boolean
+    isChallengePending?: boolean
 }
 
-export function OnlineFriends({ onChallenge, onSearchPanelChange }: OnlineFriendsProps) {
+export function OnlineFriends({
+    onChallenge,
+    onSearchPanelChange,
+    challengeDisabled = false,
+    isChallengePending = false,
+}: OnlineFriendsProps) {
     const [isAddFriendOpen, setIsAddFriendOpen] = useState(false)
     const [username, setUsername] = useState("")
     const [search, setSearch] = useState("")
@@ -84,8 +91,9 @@ export function OnlineFriends({ onChallenge, onSearchPanelChange }: OnlineFriend
                                     type="button"
                                     className={styles.challenge}
                                     onClick={() => onChallenge(friend.username)}
+                                    disabled={challengeDisabled || isChallengePending}
                                 >
-                                    Desafiar
+                                    {challengeDisabled ? "Em partida" : isChallengePending ? "Enviando..." : "Desafiar"}
                                 </button>
                             </div>
                         ))

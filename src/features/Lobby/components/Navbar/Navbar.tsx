@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 import { useGetFriendshipRequest } from "../../../../packages/hooks/players/useGetFriendshipRequest"
 import { useGetSentFriendshipRequest } from "../../../../packages/hooks/players/useGetSentFriendshipRequest"
@@ -27,6 +28,8 @@ export function Navbar({
     username,
     onLogout,
 }: NavbarProps) {
+
+    const navigate = useNavigate()
 
     const [usernameSearch, setUsernameSearch] =
         useState("")
@@ -120,11 +123,13 @@ export function Navbar({
         challengeId: string
     ) => {
         try {
-            await acceptChallenge(challengeId)
+            const game = await acceptChallenge(challengeId)
 
             mensagemAdapter.success(
                 "Desafio aceito!"
             )
+            setIsOpenChallenges(false)
+            navigate(`/game/${game.id}`)
         } catch (error) {
             mensagemAdapter.error(error)
         }

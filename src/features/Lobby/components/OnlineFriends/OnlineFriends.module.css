@@ -155,6 +155,19 @@
     background: #83d64c;
 }
 
+.challenge:disabled {
+    border-color: rgba(255, 255, 255, .12);
+    color: #7f8984;
+    background: rgba(255, 255, 255, .04);
+    cursor: not-allowed;
+}
+
+.challenge:disabled:hover {
+    border-color: rgba(255, 255, 255, .12);
+    color: #7f8984;
+    background: rgba(255, 255, 255, .04);
+}
+
 .challenge:focus-visible {
     outline: 2px solid rgba(131, 214, 76, .65);
     outline-offset: 2px;

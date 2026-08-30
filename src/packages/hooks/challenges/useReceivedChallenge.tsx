@@ -22,5 +22,6 @@ export function useReceivedChallenge() {
         queryFn: async () => {
             return await getReceivedChallengeRequest({ status: "PENDING" })
         },
+        refetchInterval: 2_000,
     })
 }

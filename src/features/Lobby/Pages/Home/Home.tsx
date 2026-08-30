@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useCreateChallenge } from "../../../../packages/hooks/challenges/useCreateChallenge"
 import { useGetPerformance } from "../../../../packages/hooks/performances/useGetPerformance"
 import { useGetGameHistory } from "../../../../packages/hooks/players/useGetGameHistory"
 import { useJoinMatchmaking } from "../../../../packages/hooks/players/useJoinMatchmaking"
 import { useCurrentMatch } from "../../../../packages/hooks/players/useCurrentMatch"
+import { usePlayerGameEvents } from "../../../../packages/hooks/games/usePlayerGameEvents"
 import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter"
 import { useAuth } from "../../../auth/contexts/auth/useAuth"
 import { Navbar } from "../../components/Navbar/Navbar"
@@ -23,9 +24,13 @@ export function Home() {
     const { data: games = [] } = useGetGameHistory(userId);
     const [isPlayerSearchOpen, setIsPlayerSearchOpen] = useState(false)
     const [isSearchingMatch, setIsSearchingMatch] = useState(false)
-    const { mutateAsync: createChallenge } = useCreateChallenge()
+    const { mutateAsync: createChallenge, isPending: isCreatingChallenge } = useCreateChallenge()
     const { mutateAsync: joinMatchmaking, isPending: isJoiningMatchmaking } = useJoinMatchmaking()
     const { data: currentMatch } = useCurrentMatch(Boolean(userId), isSearchingMatch)
+    const handleGameCreated = useCallback((createdGameId: string) => {
+        navigate(`/game/${createdGameId}`)
+    }, [navigate])
+    usePlayerGameEvents(userId, handleGameCreated)
 
     useEffect(() => {
         if (isSearchingMatch && currentMatch) {
@@ -63,15 +68,18 @@ export function Home() {
 
     const handleCreateChallenge = async (friendUsername: string) => {
         if (!user?.id) return
+        if (currentMatch) {
+            mensagemAdapter.error(null, "Você já está em uma partida em andamento.")
+            return
+        }
 
         try {
             await createChallenge({
                 challengedUsername: friendUsername,
-                initialTimeSeconds: 30,
-                incrementSeconds: 10,
+                initialTimeSeconds: 600,
+                incrementSeconds: 0,
             })
             mensagemAdapter.success("Solicitação de desafio enviada.")
-            navigate("/game")
         } catch (error) {
             mensagemAdapter.error(error)
         }
@@ -103,6 +111,8 @@ export function Home() {
                         <OnlineFriends
                             onChallenge={(friendUsername) => handleCreateChallenge(friendUsername)}
                             onSearchPanelChange={setIsPlayerSearchOpen}
+                            challengeDisabled={Boolean(currentMatch)}
+                            isChallengePending={isCreatingChallenge}
                         />
                         {isPlayerSearchOpen && <SearchPlayers />}
                         <Performance performance={performance} />
