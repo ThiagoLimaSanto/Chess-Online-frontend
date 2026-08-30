@@ -25,7 +25,7 @@ export function Home() {
     const [isSearchingMatch, setIsSearchingMatch] = useState(false)
     const { mutateAsync: createChallenge } = useCreateChallenge()
     const { mutateAsync: joinMatchmaking, isPending: isJoiningMatchmaking } = useJoinMatchmaking()
-    const { data: currentMatch } = useCurrentMatch(isSearchingMatch)
+    const { data: currentMatch } = useCurrentMatch(Boolean(userId), isSearchingMatch)
 
     useEffect(() => {
         if (isSearchingMatch && currentMatch) {
@@ -39,6 +39,11 @@ export function Home() {
 
     const handleJoinMatchmaking = async () => {
         if (!user?.id) return
+
+        if (currentMatch) {
+            navigate(`/game/${currentMatch.id}`)
+            return
+        }
 
         try {
             setIsSearchingMatch(true)
@@ -87,6 +92,7 @@ export function Home() {
                     <PlayActions
                         onPlay={handleJoinMatchmaking}
                         isSearching={isJoiningMatchmaking || isSearchingMatch}
+                        hasCurrentMatch={Boolean(currentMatch)}
                     />
 
                     <div className={styles.featureImage} role="img" aria-label="Peças de xadrez em um tabuleiro" />

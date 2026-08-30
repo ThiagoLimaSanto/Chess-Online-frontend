@@ -43,6 +43,7 @@ export function useRespondDrawOffer() {
             if (accepted) {
                 void queryClient.invalidateQueries({ queryKey: ["game", gameId] })
                 void queryClient.invalidateQueries({ queryKey: ["performance"] })
+                queryClient.setQueryData(["current-match"], null)
             }
         },
     })
@@ -57,6 +58,7 @@ export function useAbandonGame() {
             void queryClient.invalidateQueries({ queryKey: ["game", gameId] })
             void queryClient.invalidateQueries({ queryKey: ["performance"] })
             void queryClient.invalidateQueries({ queryKey: ["game-history"] })
+            queryClient.setQueryData(["current-match"], null)
         },
     })
 }

@@ -51,6 +51,7 @@ export function useGameEvents(gameId: string) {
                         }
                         if (event.type === "GAME_FINISHED" || event.type === "GAME_ABANDONED") {
                             void queryClient.invalidateQueries({ queryKey: ["performance"] })
+                            void queryClient.invalidateQueries({ queryKey: ["current-match"] })
                         }
                     }
                 } catch {
