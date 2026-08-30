@@ -12,6 +12,7 @@ import { GameDetails } from "../components/GameDetails/GameDetails"
 import { GameSummary } from "../components/GameSummary/GameSummary"
 import { PlayerCard } from "../components/PlayerCard/PlayerCard"
 import { useGameRouteProtection } from "../hooks/useGameRouteProtection"
+import { useGameClock } from "../hooks/useGameClock"
 
 import styles from "./Game.module.css"
 
@@ -49,6 +50,13 @@ export function Game() {
         isLoading,
         isError,
     })
+    const clock = useGameClock({
+        whiteTimeMillis: game?.whiteTimeMillis ?? 0,
+        blackTimeMillis: game?.blackTimeMillis ?? 0,
+        serverTimeMillis: game?.serverTimeMillis ?? 0,
+        activeColor: game?.activeColor ?? "WHITE",
+        isRunning: game?.status === "IN_PROGRESS",
+    })
 
     if (!user) return null
     if (shouldNavigateBack) return null
@@ -61,6 +69,10 @@ export function Game() {
     const opponentName = playerIsWhite ? game.blackPlayerUsername : game.whitePlayerUsername
     const playerPerformance = playerIsWhite ? whitePerformance : blackPerformance
     const opponentPerformance = playerIsWhite ? blackPerformance : whitePerformance
+    const playerTime = playerIsWhite ? clock.whiteTime : clock.blackTime
+    const opponentTime = playerIsWhite ? clock.blackTime : clock.whiteTime
+    const playerRemaining = playerIsWhite ? clock.whiteRemaining : clock.blackRemaining
+    const opponentRemaining = playerIsWhite ? clock.blackRemaining : clock.whiteRemaining
     const board = createBoard(game.board, playerColor)
     const isPlayerTurn = game.status === "IN_PROGRESS"
         && (game.moves.length % 2 === 0 ? playerColor === "WHITE" : playerColor === "BLACK")
@@ -115,7 +127,7 @@ export function Game() {
 
                 <section className={styles.gameLayout} aria-label="Partida de xadrez">
                     <aside className={styles.leftPanel}>
-                        <PlayerCard name={opponentName} color={opponentColor} rating={opponentPerformance?.rating} gamesPlayed={opponentPerformance?.gamesPlayed} victories={opponentPerformance?.victories} time="10:00" tone="opponent" />
+                        <PlayerCard name={opponentName} color={opponentColor} rating={opponentPerformance?.rating} gamesPlayed={opponentPerformance?.gamesPlayed} victories={opponentPerformance?.victories} time={opponentTime} isClockActive={game.status === "IN_PROGRESS" && game.activeColor === opponentColor} isLowTime={opponentRemaining <= 10_000} tone="opponent" />
                         <GameSummary
                             board={game.board}
                             moves={game.moves}
@@ -136,7 +148,7 @@ export function Game() {
                             turnPlayerName={turnPlayerName}
                         />
 
-                        <PlayerCard name={user.username} color={playerColor} rating={playerPerformance?.rating} gamesPlayed={playerPerformance?.gamesPlayed} victories={playerPerformance?.victories} time="10:00" tone="you" />
+                        <PlayerCard name={user.username} color={playerColor} rating={playerPerformance?.rating} gamesPlayed={playerPerformance?.gamesPlayed} victories={playerPerformance?.victories} time={playerTime} isClockActive={game.status === "IN_PROGRESS" && game.activeColor === playerColor} isLowTime={playerRemaining <= 10_000} tone="you" />
                     </div>
 
                     <GameDetails
