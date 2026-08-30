@@ -7,6 +7,7 @@ import { useJoinMatchmaking } from "../../../../packages/hooks/players/useJoinMa
 import { useCurrentMatch } from "../../../../packages/hooks/players/useCurrentMatch"
 import { usePlayerGameEvents } from "../../../../packages/hooks/games/usePlayerGameEvents"
 import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter"
+import { getGameMode, type GameMode } from "../../../../packages/constants/gameModes"
 import { useAuth } from "../../../auth/contexts/auth/useAuth"
 import { Navbar } from "../../components/Navbar/Navbar"
 import { OnlineFriends } from "../../components/OnlineFriends/OnlineFriends"
@@ -24,6 +25,7 @@ export function Home() {
     const { data: games = [] } = useGetGameHistory(userId);
     const [isPlayerSearchOpen, setIsPlayerSearchOpen] = useState(false)
     const [isSearchingMatch, setIsSearchingMatch] = useState(false)
+    const [selectedGameMode, setSelectedGameMode] = useState<GameMode>("RAPID")
     const { mutateAsync: createChallenge, isPending: isCreatingChallenge } = useCreateChallenge()
     const { mutateAsync: joinMatchmaking, isPending: isJoiningMatchmaking } = useJoinMatchmaking()
     const { data: currentMatch } = useCurrentMatch(Boolean(userId), isSearchingMatch)
@@ -52,7 +54,7 @@ export function Home() {
 
         try {
             setIsSearchingMatch(true)
-            const game = await joinMatchmaking(user.id)
+            const game = await joinMatchmaking({ userId: user.id, gameMode: selectedGameMode })
 
             if (game) {
                 navigate(`/game/${game.id}`)
@@ -74,10 +76,11 @@ export function Home() {
         }
 
         try {
+            const mode = getGameMode(selectedGameMode)
             await createChallenge({
                 challengedUsername: friendUsername,
-                initialTimeSeconds: 600,
-                incrementSeconds: 0,
+                initialTimeSeconds: mode.initialTimeSeconds,
+                incrementSeconds: mode.incrementSeconds,
             })
             mensagemAdapter.success("Solicitação de desafio enviada.")
         } catch (error) {
@@ -101,6 +104,8 @@ export function Home() {
                         onPlay={handleJoinMatchmaking}
                         isSearching={isJoiningMatchmaking || isSearchingMatch}
                         hasCurrentMatch={Boolean(currentMatch)}
+                        selectedGameMode={selectedGameMode}
+                        onGameModeChange={setSelectedGameMode}
                     />
 
                     <div className={styles.featureImage} role="img" aria-label="Peças de xadrez em um tabuleiro" />

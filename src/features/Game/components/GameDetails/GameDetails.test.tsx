@@ -7,6 +7,7 @@ import { GameDetails } from "./GameDetails"
 const actions = {
     gameStatus: "IN_PROGRESS" as const,
     playerId: "white-player",
+    gameMode: "RAPID" as const,
     onOfferDraw: vi.fn(),
     onAcceptDraw: vi.fn(),
     onDeclineDraw: vi.fn(),

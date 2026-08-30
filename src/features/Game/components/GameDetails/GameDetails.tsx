@@ -1,4 +1,5 @@
 import styles from "./GameDetails.module.css";
+import { getGameMode, type GameMode } from "../../../../packages/constants/gameModes";
 
 type GameDetailsProps = {
     moves: string[][];
@@ -14,6 +15,7 @@ type GameDetailsProps = {
     onAcceptDraw: () => void;
     onDeclineDraw: () => void;
     onAbandon: () => void;
+    gameMode: GameMode;
 };
 
 export function GameDetails({
@@ -30,6 +32,7 @@ export function GameDetails({
     onAcceptDraw,
     onDeclineDraw,
     onAbandon,
+    gameMode,
 }: GameDetailsProps) {
     const expectedScore = 1 / (1 + 10 ** ((opponentRating - playerRating) / 400));
     const victoryChange = Math.round(32 * (1 - expectedScore));
@@ -65,7 +68,7 @@ export function GameDetails({
             <section className={styles.panel}>
                 <h2>Partida</h2>
 
-                <p>♟ Ranqueada</p>
+                <p>♟ {getGameMode(gameMode).label}</p>
 
                 <p>
                     ◷ {Math.floor(initialTimeSeconds / 60)} min

@@ -153,6 +153,7 @@ export function Game() {
                         onAcceptDraw={() => void handleRespondDraw(true)}
                         onDeclineDraw={() => void handleRespondDraw(false)}
                         onAbandon={() => void handleAbandon()}
+                        gameMode={game.gameMode}
                     />
                 </section>
             </div>

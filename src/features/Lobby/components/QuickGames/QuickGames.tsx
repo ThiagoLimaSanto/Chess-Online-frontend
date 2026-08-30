@@ -1,4 +1,5 @@
 import type { PlayerGameHistory } from "../../../../packages/hooks/players/useGetGameHistory";
+import { getGameMode } from "../../../../packages/constants/gameModes";
 
 import styles from "./QuickGames.module.css";
 
@@ -49,7 +50,7 @@ export function QuickGames({
                 return <div className={styles.row} key={game.id}>
                     <span className={styles.clock}>◷</span>
 
-                    <span>{formatTimeControl(game)}</span>
+                    <span>{getGameMode(game.gameMode).label} · {formatTimeControl(game)}</span>
 
                     <span className={styles.avatar}>
                         {username[0].toUpperCase()}

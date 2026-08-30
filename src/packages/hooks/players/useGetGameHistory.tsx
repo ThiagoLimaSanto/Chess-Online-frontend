@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { api } from "../../auth/axios"
+import type { GameMode } from "../../constants/gameModes"
 
 export type PlayerGameHistory = {
     id: string
@@ -9,6 +10,7 @@ export type PlayerGameHistory = {
     initialTimeSeconds: number
     incrementSeconds: number
     finishedAt: string
+    gameMode: GameMode
 }
 
 type GameHistoryPage = {
