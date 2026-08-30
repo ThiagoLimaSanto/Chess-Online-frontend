@@ -74,6 +74,18 @@ describe("useGameEvents", () => {
         expect(invalidate).toHaveBeenCalledWith({ queryKey: ["performance"] })
     })
 
+    it("atualiza a oferta de empate em tempo real", () => {
+        const queryClient = new QueryClient()
+        const invalidate = vi.spyOn(queryClient, "invalidateQueries").mockResolvedValue(undefined)
+        renderHook(() => useGameEvents("game-1"), { wrapper: wrapper(queryClient) })
+        const client = stomp.instances[0]
+
+        act(() => client.onConnect?.())
+        act(() => client.handler?.({ body: JSON.stringify({ type: "DRAW_OFFERED", gameId: "game-1" }) }))
+
+        expect(invalidate).toHaveBeenCalledWith({ queryKey: ["draw-offer", "game-1"] })
+    })
+
     it("ignora eventos de outra partida e mensagens inválidas", () => {
         const queryClient = new QueryClient()
         const invalidate = vi.spyOn(queryClient, "invalidateQueries").mockResolvedValue(undefined)

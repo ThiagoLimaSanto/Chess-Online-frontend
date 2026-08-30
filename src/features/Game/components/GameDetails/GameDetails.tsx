@@ -6,7 +6,14 @@ type GameDetailsProps = {
     incrementSeconds: number;
     playerRating?: number;
     opponentRating?: number;
-    onUnavailable: () => void;
+    gameStatus: "IN_PROGRESS" | "FINISHED";
+    playerId: string;
+    drawOfferedByPlayerId?: string | null;
+    isActionPending?: boolean;
+    onOfferDraw: () => void;
+    onAcceptDraw: () => void;
+    onDeclineDraw: () => void;
+    onAbandon: () => void;
 };
 
 export function GameDetails({
@@ -15,11 +22,21 @@ export function GameDetails({
     incrementSeconds,
     playerRating = 1200,
     opponentRating = 1200,
-    onUnavailable,
+    gameStatus,
+    playerId,
+    drawOfferedByPlayerId,
+    isActionPending = false,
+    onOfferDraw,
+    onAcceptDraw,
+    onDeclineDraw,
+    onAbandon,
 }: GameDetailsProps) {
     const expectedScore = 1 / (1 + 10 ** ((opponentRating - playerRating) / 400));
     const victoryChange = Math.round(32 * (1 - expectedScore));
     const lossChange = Math.round(32 * -expectedScore);
+    const isFinished = gameStatus === "FINISHED";
+    const playerOfferedDraw = drawOfferedByPlayerId === playerId;
+    const opponentOfferedDraw = !isFinished && Boolean(drawOfferedByPlayerId) && !playerOfferedDraw;
 
     return (
         <aside className={styles.sidePanel}>
@@ -64,16 +81,33 @@ export function GameDetails({
                 </p>
 
                 <div className={styles.actions}>
-                    <button type="button" onClick={onUnavailable}>
-                        Oferecer empate
-                    </button>
+                    {opponentOfferedDraw ? (
+                        <>
+                            <p className={styles.drawStatus}>Seu adversário solicitou empate.</p>
+                            <button type="button" disabled={isActionPending} onClick={onAcceptDraw}>
+                                Aceitar empate
+                            </button>
+                            <button type="button" className={styles.decline} disabled={isActionPending} onClick={onDeclineDraw}>
+                                Recusar empate
+                            </button>
+                        </>
+                    ) : (
+                        <button
+                            type="button"
+                            disabled={isFinished || playerOfferedDraw || isActionPending}
+                            onClick={onOfferDraw}
+                        >
+                            {playerOfferedDraw ? "Empate solicitado" : "Oferecer empate"}
+                        </button>
+                    )}
 
                     <button
                         type="button"
                         className={styles.abandon}
-                        onClick={onUnavailable}
+                        disabled={isFinished || isActionPending}
+                        onClick={onAbandon}
                     >
-                        Abandonar partida
+                        {isFinished ? "Partida encerrada" : "Abandonar partida"}
                     </button>
                 </div>
             </section>

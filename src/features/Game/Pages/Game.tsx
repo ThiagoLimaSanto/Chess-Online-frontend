@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { mensagemAdapter } from "../../../packages/mensagem/mensagemAdapter"
 import { useGetGame, type GamePiece } from "../../../packages/hooks/games/useGetGame"
 import { useGameEvents } from "../../../packages/hooks/games/useGameEvents"
+import { useAbandonGame, useGetDrawOffer, useOfferDraw, useRespondDrawOffer } from "../../../packages/hooks/games/useGameActions"
 import { useGetPerformance } from "../../../packages/hooks/performances/useGetPerformance"
 import { useAuth } from "../../auth/contexts/auth/useAuth"
 import { Navbar } from "../../Lobby/components/Navbar/Navbar"
@@ -37,6 +38,10 @@ export function Game() {
     useGameEvents(gameId ?? "")
     const { data: whitePerformance } = useGetPerformance(game?.whitePlayer ?? "")
     const { data: blackPerformance } = useGetPerformance(game?.blackPlayer ?? "")
+    const { data: drawOffer } = useGetDrawOffer(gameId ?? "", Boolean(game && user))
+    const offerDraw = useOfferDraw()
+    const respondDrawOffer = useRespondDrawOffer()
+    const abandonGame = useAbandonGame()
     const shouldNavigateBack = useGameRouteProtection({
         gameId,
         userId: user?.id,
@@ -69,9 +74,37 @@ export function Game() {
         return rows
     }, [])
 
-    const unavailable = () => {
-        mensagemAdapter.error("Essa ação estará disponível quando a partida estiver conectada à API.")
+    const handleOfferDraw = async () => {
+        try {
+            await offerDraw.mutateAsync(game.id)
+            mensagemAdapter.success("Solicitação de empate enviada.")
+        } catch (error) {
+            mensagemAdapter.error(error, "Não foi possível solicitar empate.")
+        }
     }
+
+    const handleRespondDraw = async (accepted: boolean) => {
+        try {
+            await respondDrawOffer.mutateAsync({ gameId: game.id, accepted })
+            mensagemAdapter.success(accepted ? "Empate aceito." : "Solicitação de empate recusada.")
+        } catch (error) {
+            mensagemAdapter.error(error, "Não foi possível responder à solicitação de empate.")
+        }
+    }
+
+    const handleAbandon = async () => {
+        if (!window.confirm("Deseja realmente abandonar a partida?")) return
+
+        try {
+            await abandonGame.mutateAsync(game.id)
+            mensagemAdapter.success("Você abandonou a partida.")
+            navigate("/")
+        } catch (error) {
+            mensagemAdapter.error(error, "Não foi possível abandonar a partida.")
+        }
+    }
+
+    const isActionPending = offerDraw.isPending || respondDrawOffer.isPending || abandonGame.isPending
 
     return (
         <main className={styles.gamePage}>
@@ -112,7 +145,14 @@ export function Game() {
                         incrementSeconds={game.incrementSeconds}
                         playerRating={playerPerformance?.rating}
                         opponentRating={opponentPerformance?.rating}
-                        onUnavailable={unavailable}
+                        gameStatus={game.status}
+                        playerId={user.id}
+                        drawOfferedByPlayerId={drawOffer?.offeredByPlayerId}
+                        isActionPending={isActionPending}
+                        onOfferDraw={() => void handleOfferDraw()}
+                        onAcceptDraw={() => void handleRespondDraw(true)}
+                        onDeclineDraw={() => void handleRespondDraw(false)}
+                        onAbandon={() => void handleAbandon()}
                     />
                 </section>
             </div>

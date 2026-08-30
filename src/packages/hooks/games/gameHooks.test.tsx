@@ -7,6 +7,7 @@ import { api } from "../../auth/axios"
 import { useGetLegalMoves } from "./useGetLegalMoves"
 import { useGetGame } from "./useGetGame"
 import { useMakeMove } from "./useMakeMove"
+import { useAbandonGame, useGetDrawOffer, useOfferDraw, useRespondDrawOffer } from "./useGameActions"
 
 vi.mock("../../auth/axios", () => ({
     api: { get: vi.fn(), post: vi.fn() },
@@ -80,5 +81,45 @@ describe("hooks de movimentos", () => {
         })
         expect(invalidate).toHaveBeenCalledWith({ queryKey: ["game", "game-1"] })
         expect(invalidate).toHaveBeenCalledWith({ queryKey: ["legal-moves", "game-1"] })
+    })
+
+    it("busca a solicitação de empate pendente", async () => {
+        vi.mocked(api.get).mockResolvedValue({ data: { offeredByPlayerId: "white" } })
+        const queryClient = testQueryClient()
+        const { result } = renderHook(() => useGetDrawOffer("game-1"), {
+            wrapper: wrapper(queryClient),
+        })
+
+        await waitFor(() => expect(result.current.data).toEqual({ offeredByPlayerId: "white" }))
+        expect(api.get).toHaveBeenCalledWith("/games/game-1/draw-offer")
+    })
+
+    it("oferece e responde ao empate", async () => {
+        vi.mocked(api.post)
+            .mockResolvedValueOnce({ data: { offeredByPlayerId: "white" } })
+            .mockResolvedValueOnce({ data: undefined })
+        const queryClient = testQueryClient()
+        const offer = renderHook(() => useOfferDraw(), { wrapper: wrapper(queryClient) })
+        const respond = renderHook(() => useRespondDrawOffer(), { wrapper: wrapper(queryClient) })
+
+        await act(async () => {
+            await offer.result.current.mutateAsync("game-1")
+            await respond.result.current.mutateAsync({ gameId: "game-1", accepted: true })
+        })
+
+        expect(api.post).toHaveBeenNthCalledWith(1, "/games/game-1/draw-offer")
+        expect(api.post).toHaveBeenNthCalledWith(2, "/games/game-1/draw-offer/respond", { accepted: true })
+    })
+
+    it("abandona a partida sem enviar playerId manipulável", async () => {
+        vi.mocked(api.post).mockResolvedValue({ data: undefined })
+        const queryClient = testQueryClient()
+        const { result } = renderHook(() => useAbandonGame(), { wrapper: wrapper(queryClient) })
+
+        await act(async () => {
+            await result.current.mutateAsync("game-1")
+        })
+
+        expect(api.post).toHaveBeenCalledWith("/games/game-1/abandon")
     })
 })

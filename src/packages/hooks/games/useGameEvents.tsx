@@ -5,7 +5,7 @@ import { useQueryClient } from "@tanstack/react-query"
 import { getAuthToken } from "../../auth/axios"
 
 type GameEvent = {
-    type: "MOVE_MADE" | "GAME_FINISHED" | "GAME_ABANDONED"
+    type: "MOVE_MADE" | "GAME_FINISHED" | "GAME_ABANDONED" | "DRAW_OFFERED" | "DRAW_OFFER_ACCEPTED" | "DRAW_OFFER_DECLINED"
     gameId: string
 }
 
@@ -42,6 +42,13 @@ export function useGameEvents(gameId: string) {
                     const event = JSON.parse(message.body) as GameEvent
                     if (event.gameId === gameId) {
                         void queryClient.invalidateQueries({ queryKey: ["game", gameId] })
+                        if (
+                            event.type.startsWith("DRAW_OFFER")
+                            || event.type === "GAME_FINISHED"
+                            || event.type === "GAME_ABANDONED"
+                        ) {
+                            void queryClient.invalidateQueries({ queryKey: ["draw-offer", gameId] })
+                        }
                         if (event.type === "GAME_FINISHED" || event.type === "GAME_ABANDONED") {
                             void queryClient.invalidateQueries({ queryKey: ["performance"] })
                         }
