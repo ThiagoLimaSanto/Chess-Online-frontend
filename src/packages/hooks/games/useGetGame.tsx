@@ -11,5 +11,10 @@ async function getGame(gameId: string) {
 }
 
 export function useGetGame(gameId: string) {
-    return useQuery({ queryKey: ["game", gameId], queryFn: () => getGame(gameId), enabled: Boolean(gameId) })
+    return useQuery({
+        queryKey: ["game", gameId],
+        queryFn: () => getGame(gameId),
+        enabled: Boolean(gameId),
+        retry: false,
+    })
 }

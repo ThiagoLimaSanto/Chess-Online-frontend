@@ -10,6 +10,7 @@ import { GameBoard } from "../components/GameBoard/GameBoard"
 import { GameDetails } from "../components/GameDetails/GameDetails"
 import { GameSummary } from "../components/GameSummary/GameSummary"
 import { PlayerCard } from "../components/PlayerCard/PlayerCard"
+import { useGameRouteProtection } from "../hooks/useGameRouteProtection"
 
 import styles from "./Game.module.css"
 
@@ -36,11 +37,18 @@ export function Game() {
     useGameEvents(gameId ?? "")
     const { data: whitePerformance } = useGetPerformance(game?.whitePlayer ?? "")
     const { data: blackPerformance } = useGetPerformance(game?.blackPlayer ?? "")
+    const shouldNavigateBack = useGameRouteProtection({
+        gameId,
+        userId: user?.id,
+        game,
+        isLoading,
+        isError,
+    })
 
     if (!user) return null
-    if (!gameId) return <main className={styles.gamePage}><div className={styles.feedback}>Nenhuma partida foi selecionada.</div></main>
+    if (shouldNavigateBack) return null
     if (isLoading) return <main className={styles.gamePage}><div className={styles.feedback}>Carregando partida...</div></main>
-    if (isError || !game) return <main className={styles.gamePage}><div className={styles.feedback}>Não foi possível carregar a partida.</div></main>
+    if (!gameId || !game) return null
 
     const playerIsWhite = game.whitePlayer === user.id
     const playerColor = playerIsWhite ? "WHITE" : "BLACK"
