@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { api } from "../../auth/axios"
 import { useGetLegalMoves } from "./useGetLegalMoves"
+import { useGetGame } from "./useGetGame"
 import { useMakeMove } from "./useMakeMove"
 
 vi.mock("../../auth/axios", () => ({
@@ -33,6 +34,20 @@ describe("hooks de movimentos", () => {
 
         await waitFor(() => expect(result.current.data).toEqual(["e3", "e4"]))
         expect(api.get).toHaveBeenCalledWith("/games/game-1/legal-moves", { params: { from: "e2" } })
+    })
+
+    it("busca os detalhes completos da partida", async () => {
+        const game = {
+            id: "game-1", whitePlayer: "white", whitePlayerUsername: "Ana",
+            blackPlayer: "black", blackPlayerUsername: "Bia", status: "IN_PROGRESS",
+            initialTimeSeconds: 600, incrementSeconds: 0, board: [], moves: [],
+        }
+        vi.mocked(api.get).mockResolvedValue({ data: game })
+        const queryClient = testQueryClient()
+        const { result } = renderHook(() => useGetGame("game-1"), { wrapper: wrapper(queryClient) })
+
+        await waitFor(() => expect(result.current.data).toEqual(game))
+        expect(api.get).toHaveBeenCalledWith("/games/game-1")
     })
 
     it("não consulta movimentos sem uma casa selecionada", () => {

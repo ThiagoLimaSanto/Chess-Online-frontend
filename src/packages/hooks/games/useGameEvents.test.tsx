@@ -86,4 +86,14 @@ describe("useGameEvents", () => {
 
         expect(invalidate).not.toHaveBeenCalled()
     })
+
+    it("encerra a conexão quando o componente desmonta", () => {
+        const queryClient = new QueryClient()
+        const { unmount } = renderHook(() => useGameEvents("game-1"), { wrapper: wrapper(queryClient) })
+        const client = stomp.instances[0]
+
+        unmount()
+
+        expect(client.deactivate).toHaveBeenCalledOnce()
+    })
 })
