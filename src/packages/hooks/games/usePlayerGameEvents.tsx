@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { Client } from "@stomp/stompjs"
 import { useQueryClient } from "@tanstack/react-query"
 
-import { getAuthToken } from "../../auth/axios"
+import { getAuthToken, getValidAuthToken } from "../../auth/axios"
 
 type PlayerGameEvent = {
     type: "GAME_CREATED"
@@ -35,6 +35,11 @@ export function usePlayerGameEvents(playerId: string, onGameCreated: (gameId: st
             heartbeatOutgoing: 10000,
             debug: () => undefined,
         })
+
+        client.beforeConnect = async () => {
+            const validToken = await getValidAuthToken()
+            client.connectHeaders = { Authorization: `Bearer ${validToken}` }
+        }
 
         client.onConnect = () => {
             client.subscribe(`/topic/players/${playerId}`, (message) => {

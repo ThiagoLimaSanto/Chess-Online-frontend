@@ -16,6 +16,7 @@ export interface UserResponse {
     username: string,
     id: string,
     createdAt: string,
+    role: "ADMIN" | "USER",
 }
 
 export interface ChallengeResponse {

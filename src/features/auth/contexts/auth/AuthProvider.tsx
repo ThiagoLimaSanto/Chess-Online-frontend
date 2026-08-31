@@ -1,6 +1,11 @@
 import { useEffect, useState, type ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
-import { clearAuthToken, setAuthToken } from "../../../../packages/auth/axios"
+import {
+    clearAuthToken,
+    refreshAccessToken,
+    SESSION_EXPIRED_EVENT,
+    setAuthToken,
+} from "../../../../packages/auth/axios"
 import { useGetMe } from "../../../../packages/hooks/auth/useGetMe"
 import { useHeartbeat } from "../../../../packages/hooks/auth/useHeartbeat"
 import { useLogin } from "../../../../packages/hooks/auth/useLogin"
@@ -9,14 +14,10 @@ import { useRegister } from "../../../../packages/hooks/auth/useRegister"
 import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter"
 import { AuthContext, type AuthUser } from "./AuthContext"
 
-const AUTH_USER_KEY = "chess-auth-user"
-
 export function AuthProvider({ children }: { children: ReactNode }) {
     const navigate = useNavigate()
-    const [user, setUser] = useState<AuthUser | null>(() => {
-        const storedUser = localStorage.getItem(AUTH_USER_KEY)
-        return storedUser ? JSON.parse(storedUser) as AuthUser : null
-    })
+    const [user, setUser] = useState<AuthUser | null>(null)
+    const [isBootstrapping, setIsBootstrapping] = useState(true)
     const loginMutation = useLogin()
     const getMeMutation = useGetMe()
     const { mutateAsync: getMe } = getMeMutation
@@ -26,28 +27,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     useHeartbeat(user?.id)
 
     useEffect(() => {
-        if (!localStorage.getItem("chess-auth-token")) return
+        let active = true
 
-        getMe()
-            .then(setUser)
+        refreshAccessToken()
+            .then(() => getMe())
+            .then((authenticatedUser) => {
+                if (active) setUser(authenticatedUser)
+            })
             .catch(() => {
                 clearAuthToken()
-                setUser(null)
+                if (active) setUser(null)
             })
+            .finally(() => {
+                localStorage.removeItem("chess-auth-user")
+                if (active) setIsBootstrapping(false)
+            })
+
+        return () => { active = false }
     }, [getMe])
 
     useEffect(() => {
-        if (user) {
-            localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user))
-        } else {
-            localStorage.removeItem(AUTH_USER_KEY)
+        const handleExpiredSession = () => {
+            setUser(null)
+            navigate("/login", { replace: true })
         }
-    }, [user])
+        window.addEventListener(SESSION_EXPIRED_EVENT, handleExpiredSession)
+        return () => window.removeEventListener(SESSION_EXPIRED_EVENT, handleExpiredSession)
+    }, [navigate])
 
     async function login(username: string, password: string) {
         mensagemAdapter.dismiss()
         const response = await loginMutation.mutateAsync({ username, password })
-        setAuthToken(response.token)
+        setAuthToken(response.accessToken)
         const authenticatedUser = await getMe()
         setUser(authenticatedUser)
         return authenticatedUser
@@ -59,11 +70,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     async function logout() {
-        await logoutMutation.mutateAsync()
-        clearAuthToken()
-        setUser(null)
-        mensagemAdapter.success("Você saiu!")
-        navigate("/login")
+        try {
+            await logoutMutation.mutateAsync()
+        } finally {
+            clearAuthToken()
+            setUser(null)
+            mensagemAdapter.success("Você saiu!")
+            navigate("/login")
+        }
     }
 
     return (
@@ -71,7 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             value={{
                 user,
                 isAuthenticated: user !== null,
-                isLoading: loginMutation.isPending || getMeMutation.isPending || registerMutation.isPending || logoutMutation.isPending,
+                isLoading: isBootstrapping || loginMutation.isPending || getMeMutation.isPending || registerMutation.isPending || logoutMutation.isPending,
                 login,
                 register,
                 logout,

@@ -3,6 +3,7 @@ import { createContext } from "react"
 export type AuthUser = {
     id: string
     username: string
+    role: "ADMIN" | "USER"
 }
 
 export type AuthContextValue = {

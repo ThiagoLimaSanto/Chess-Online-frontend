@@ -11,7 +11,7 @@ export type LoginPayload = {
 }
 
 export type LoginResponse = {
-    token: string
+    accessToken: string
 }
 
 async function loginRequest(payload: LoginPayload) {

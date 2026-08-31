@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { Client } from "@stomp/stompjs"
 import { useQueryClient } from "@tanstack/react-query"
 
-import { getAuthToken } from "../../auth/axios"
+import { getAuthToken, getValidAuthToken } from "../../auth/axios"
 
 type GameEvent = {
     type: "MOVE_MADE" | "GAME_FINISHED" | "GAME_ABANDONED" | "DRAW_OFFERED" | "DRAW_OFFER_ACCEPTED" | "DRAW_OFFER_DECLINED"
@@ -35,6 +35,11 @@ export function useGameEvents(gameId: string) {
             heartbeatOutgoing: 10000,
             debug: () => undefined,
         })
+
+        client.beforeConnect = async () => {
+            const validToken = await getValidAuthToken()
+            client.connectHeaders = { Authorization: `Bearer ${validToken}` }
+        }
 
         client.onConnect = () => {
             client.subscribe(`/topic/games/${gameId}`, (message) => {
