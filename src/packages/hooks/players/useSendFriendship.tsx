@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { api } from "../../auth/axios"
+import { invalidateFriendshipQueries } from "./invalidateFriendshipQueries"
 
 async function sendFriendshipRequest(receiverId: string) {
     const response = await api.post(
@@ -16,16 +17,6 @@ export function useSendFriendship() {
     return useMutation({
         mutationFn: sendFriendshipRequest,
 
-        onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["friendships"],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ["friendships-sent-requests"],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ["players"],
-            })
-        },
+        onSuccess: () => invalidateFriendshipQueries(queryClient),
     })
 }

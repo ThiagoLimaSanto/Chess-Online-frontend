@@ -4,6 +4,8 @@ import { useCreateChallenge } from "../../../../packages/hooks/challenges/useCre
 import { useGetPerformance } from "../../../../packages/hooks/performances/useGetPerformance"
 import { useGetGameHistory } from "../../../../packages/hooks/players/useGetGameHistory"
 import { useJoinMatchmaking } from "../../../../packages/hooks/players/useJoinMatchmaking"
+import { useLeaveMatchmaking } from "../../../../packages/hooks/players/useLeaveMatchmaking"
+import { useMatchmakingQueueStatus } from "../../../../packages/hooks/players/useMatchmakingQueueStatus"
 import { useCurrentMatch } from "../../../../packages/hooks/players/useCurrentMatch"
 import { usePlayerGameEvents } from "../../../../packages/hooks/games/usePlayerGameEvents"
 import { mensagemAdapter } from "../../../../packages/mensagem/mensagemAdapter"
@@ -28,17 +30,20 @@ export function Home() {
     const [selectedGameMode, setSelectedGameMode] = useState<GameMode>("RAPID")
     const { mutateAsync: createChallenge, isPending: isCreatingChallenge } = useCreateChallenge()
     const { mutateAsync: joinMatchmaking, isPending: isJoiningMatchmaking } = useJoinMatchmaking()
-    const { data: currentMatch } = useCurrentMatch(Boolean(userId), isSearchingMatch)
+    const { mutateAsync: leaveMatchmaking, isPending: isLeavingMatchmaking } = useLeaveMatchmaking()
+    const { data: isInQueue = false } = useMatchmakingQueueStatus(userId, isSearchingMatch)
+    const isSearching = isSearchingMatch || isInQueue
+    const { data: currentMatch } = useCurrentMatch(Boolean(userId), isSearching && !isLeavingMatchmaking)
     const handleGameCreated = useCallback((createdGameId: string) => {
         navigate(`/game/${createdGameId}`)
     }, [navigate])
     usePlayerGameEvents(userId, handleGameCreated)
 
     useEffect(() => {
-        if (isSearchingMatch && currentMatch) {
+        if (isSearching && currentMatch) {
             navigate(`/game/${currentMatch.id}`)
         }
-    }, [currentMatch, isSearchingMatch, navigate])
+    }, [currentMatch, isSearching, navigate])
 
     if (!user) return null
 
@@ -88,6 +93,18 @@ export function Home() {
         }
     }
 
+    const handleLeaveMatchmaking = async () => {
+        if (!user?.id || isJoiningMatchmaking || isLeavingMatchmaking) return
+
+        try {
+            await leaveMatchmaking(user.id)
+            setIsSearchingMatch(false)
+            mensagemAdapter.success("Você saiu da fila de matchmaking.")
+        } catch (error) {
+            mensagemAdapter.error(error)
+        }
+    }
+
     return (
         <main className={styles.home}>
             <section className={styles.content}>
@@ -102,7 +119,10 @@ export function Home() {
                 <div className={`${styles.dashboard} ${isPlayerSearchOpen ? styles.dashboardSearchOpen : ""}`}>
                     <PlayActions
                         onPlay={handleJoinMatchmaking}
-                        isSearching={isJoiningMatchmaking || isSearchingMatch}
+                        isSearching={isJoiningMatchmaking || isSearching}
+                        onCancelSearch={handleLeaveMatchmaking}
+                        isJoining={isJoiningMatchmaking}
+                        isCancelling={isLeavingMatchmaking}
                         hasCurrentMatch={Boolean(currentMatch)}
                         selectedGameMode={selectedGameMode}
                         onGameModeChange={setSelectedGameMode}

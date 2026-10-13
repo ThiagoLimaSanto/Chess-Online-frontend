@@ -11,7 +11,7 @@ export function useMatchmakingQueueStatus(userId: string, isSearching: boolean) 
     return useQuery({
         queryKey: ["matchmaking-queue", userId],
         queryFn: () => getMatchmakingQueueStatus(userId),
-        enabled: Boolean(userId) && isSearching,
+        enabled: Boolean(userId),
         refetchInterval: isSearching ? 2_000 : false,
     })
 }

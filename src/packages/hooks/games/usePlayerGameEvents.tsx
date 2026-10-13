@@ -3,11 +3,12 @@ import { Client } from "@stomp/stompjs"
 import { useQueryClient } from "@tanstack/react-query"
 
 import { getAuthToken, getValidAuthToken } from "../../auth/axios"
+import { invalidateFriendshipQueries } from "../players/invalidateFriendshipQueries"
 
 type PlayerGameEvent = {
     type: "GAME_CREATED"
     gameId: string
-}
+} | { type: "FRIENDSHIP_UPDATED" }
 
 function websocketUrl() {
     if (import.meta.env.VITE_WS_URL) return import.meta.env.VITE_WS_URL
@@ -48,11 +49,15 @@ export function usePlayerGameEvents(playerId: string, onGameCreated: (gameId: st
                     if (event.type === "GAME_CREATED" && event.gameId) {
                         void queryClient.invalidateQueries({ queryKey: ["current-match"] })
                         onGameCreated(event.gameId)
+                    } else if (event.type === "FRIENDSHIP_UPDATED") {
+                        void invalidateFriendshipQueries(queryClient, playerId)
                     }
                 } catch {
-                    // Ignora eventos fora do contrato de criação de partidas.
+                    // Ignora mensagens fora do contrato de eventos do jogador.
                 }
             })
+            // Recupera mudanças de amizade ocorridas antes da conexão ou durante uma queda.
+            void invalidateFriendshipQueries(queryClient, playerId)
         }
 
         client.activate()

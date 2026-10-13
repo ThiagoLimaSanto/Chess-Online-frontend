@@ -8,6 +8,9 @@ type PlayActionsProps = {
     hasCurrentMatch?: boolean
     selectedGameMode: GameMode
     onGameModeChange: (mode: GameMode) => void
+    onCancelSearch?: () => void | Promise<void>
+    isJoining?: boolean
+    isCancelling?: boolean
 }
 
 export function PlayActions({
@@ -16,6 +19,9 @@ export function PlayActions({
     hasCurrentMatch = false,
     selectedGameMode,
     onGameModeChange,
+    onCancelSearch,
+    isJoining = false,
+    isCancelling = false,
 }: PlayActionsProps) {
     return <section className={styles.playCard}>
         <div className={styles.icon}>◷</div>
@@ -37,6 +43,7 @@ export function PlayActions({
                 </button>
             ))}
         </div>
-        <Buttons onPlay={onPlay} isSearching={isSearching} hasCurrentMatch={hasCurrentMatch} />
+        <Buttons onPlay={onPlay} isSearching={isSearching} hasCurrentMatch={hasCurrentMatch}
+            onCancelSearch={onCancelSearch} isJoining={isJoining} isCancelling={isCancelling} />
     </section>
 }

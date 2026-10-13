@@ -93,7 +93,7 @@
 .blackPiece {
     z-index: 1;
     font-family: Georgia, serif;
-    font-size: clamp(38px, 5.8vw, 64px);
+    font-size: clamp(38px, 6.96vw, 77px);
     line-height: 1;
 }
 

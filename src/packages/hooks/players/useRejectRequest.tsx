@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "../../auth/axios"
+import { invalidateFriendshipQueries } from "./invalidateFriendshipQueries"
 import type { FriendshipResponse, PageResponse } from "../types/response/PageResponse"
 
 async function rejectRequest(requesterId: string) {
@@ -37,16 +38,6 @@ export function useRejectRequest() {
                 queryClient.setQueryData(queryKey, data)
             })
         },
-        onSettled: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["friendships"],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ["friendships-requests"],
-            })
-            queryClient.invalidateQueries({
-                queryKey: ["friendships-sent-requests"],
-            })
-        },
+        onSettled: () => invalidateFriendshipQueries(queryClient),
     })
 }

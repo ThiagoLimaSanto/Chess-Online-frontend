@@ -22,8 +22,8 @@ export function GameDetails({
     moves,
     initialTimeSeconds,
     incrementSeconds,
-    playerRating = 1200,
-    opponentRating = 1200,
+    playerRating = 100,
+    opponentRating = 100,
     gameStatus,
     playerId,
     drawOfferedByPlayerId,
@@ -49,7 +49,7 @@ export function GameDetails({
                     <span>Chat</span>
                 </div>
 
-                <ol className={styles.moveList}>
+                <ol className={styles.moveList} aria-label="Histórico de movimentos" tabIndex={0}>
                     {moves.map(([white, black], index) => (
                         <li
                             className={

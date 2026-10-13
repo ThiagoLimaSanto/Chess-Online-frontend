@@ -9,13 +9,16 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     server: {
       open: true,
+      allowedHosts: [
+        'discusses-cooked-updating-participated.trycloudflare.com',
+      ],
       proxy: {
         '/api': {
-          target: env.VITE_API_TARGET ?? 'http://localhost:3000',
+          target: env.VITE_API_TARGET ?? 'https://resume-shall-rochester-yours.trycloudflare.com',
           changeOrigin: true,
         },
         '/ws': {
-          target: env.VITE_API_TARGET ?? 'http://localhost:3000',
+          target: env.VITE_API_TARGET ?? 'https://resume-shall-rochester-yours.trycloudflare.com',
           changeOrigin: true,
           ws: true,
         },

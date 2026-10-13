@@ -1,5 +1,7 @@
 .actions {
     width: 100%;
+    display: grid;
+    gap: 8px;
 }
 
 .primary {
@@ -27,4 +29,24 @@
 .primary:disabled {
     cursor: wait;
     opacity: .7;
+}
+
+.cancel {
+    width: 100%;
+    min-height: 36px;
+    border: 1px solid rgba(236, 79, 69, .5);
+    border-radius: 8px;
+    color: #ef8a82;
+    background: rgba(103, 27, 23, .1);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cancel:hover:not(:disabled) {
+    background: rgba(145, 36, 29, .2);
+}
+
+.cancel:disabled {
+    opacity: .6;
+    cursor: wait;
 }

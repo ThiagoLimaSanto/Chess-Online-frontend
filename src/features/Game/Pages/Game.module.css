@@ -12,7 +12,7 @@
 }
 
 .content {
-    width: min(100%, 1240px);
+    width: min(100%, 1370px);
     min-height: 100vh;
     margin: auto;
     padding: 0 18px 38px;
@@ -38,7 +38,7 @@
 
 .gameLayout {
     display: grid;
-    grid-template-columns: 250px minmax(500px, 650px) 238px;
+    grid-template-columns: 250px minmax(600px, 780px) 238px;
     justify-content: center;
     align-items: start;
     gap: 22px;
@@ -52,7 +52,7 @@
 
 @media (max-width: 1180px) {
     .gameLayout {
-        grid-template-columns: minmax(200px, 230px) minmax(420px, 650px);
+        grid-template-columns: minmax(200px, 230px) minmax(420px, 780px);
     }
 
     .gameLayout> :last-child {
